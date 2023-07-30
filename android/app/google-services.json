@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "245483000315",
+    "project_id": "acro-gate",
+    "storage_bucket": "acro-gate.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:245483000315:android:8bc70442209dcb3bd9bb5e",
+        "android_client_info": {
+          "package_name": "com.example.acrogate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "245483000315-sqo9sbeva8c9f02ih3jisfo64cpsn4tn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.acrogate",
+            "certificate_hash": "76b170dd274f35aa15c985d263c2bed3330a15a3"
+          }
+        },
+        {
+          "client_id": "245483000315-jacche8ovukqii3r5097h67i27h7p6h7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChz-PNhuX9XXqfiZw-m1LkJEiKR8Mb_tE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "245483000315-jacche8ovukqii3r5097h67i27h7p6h7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "245483000315-a75dlsvj5v2881jq1m7me1mu7o6rgb29.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.acrogate"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
