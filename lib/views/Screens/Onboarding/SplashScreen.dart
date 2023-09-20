@@ -1,0 +1,58 @@
+import 'package:acrogate/providers/auth_provider.dart';
+import 'package:acrogate/views/Screens/Onboarding/Login.dart';
+import 'package:acrogate/views/Screens/Onboarding/Register.dart';
+import 'package:acrogate/views/constants.dart';
+import 'package:flutter/material.dart';
+import 'package:acrogate/views/widgets/SizeConfig.dart';
+import 'package:provider/provider.dart';
+
+class SplashScreen extends StatefulWidget {
+  static var routeName = "/splash";
+
+  const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    loadScreen();
+  }
+
+  Future loadScreen() async {
+    var authProvider = Provider.of<Auth>(context, listen: false);
+
+    Future.delayed(const Duration(seconds: 2), () async {
+    //   await authProvider.autoLogin().then((_) async {
+    //     if (authProvider.isAuth) {
+    //       var user = await authProvider.checkUser();
+    //
+    //     } else {
+    //       Navigator.of(context).pushReplacementNamed(LogIn.routeName);
+    //     }
+    //   });
+      Navigator.of(context).pushReplacementNamed(LogIn.routeName);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // You have to call it on your starting screen
+    SizeConfig().init(context);
+    return Scaffold(
+      backgroundColor: ksecondaryColor,
+      body: Center(
+        child: SizedBox(
+          height: 350.0,
+          // child: Image.asset(
+          //   'assets/images/splash.gif',
+          //   fit: BoxFit.contain,
+          // ),
+        ),
+      ),
+    );
+  }
+}
