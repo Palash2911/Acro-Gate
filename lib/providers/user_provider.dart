@@ -87,28 +87,23 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  // Future<Users?> getUserDetails(String uid) async {
+  // Future<Users?> getFlatDetails(String uid) async {
   //   try {
-  //     CollectionReference users =
-  //         FirebaseFirestore.instance.collection('Users');
-  //     Users? user;
+  //     CollectionReference flats =
+  //         FirebaseFirestore.instance.collection('Flats');
+  //     Flats? flat;
   //
   //     if (uid.isNotEmpty) {
   //       uid = uid;
   //     }
-  //     await users.doc(uid.toString()).get().then((DocumentSnapshot query) {
+  //     await flats.doc(uid.toString()).get().then((DocumentSnapshot query) {
   //       Map<String, dynamic> data = query.data() as Map<String, dynamic>;
-  //       user = Users(
-  //         id: data["UID"],
-  //         bio: data["Bio"],
-  //         name: data["Name"],
-  //         email: data["Email"],
+  //       flat = Flats(
+  //         flatId: data["UID"],
+  //         flatNo: data["FlatNo"],
+  //         oname: data["Name"],
   //         phone: data["PhoneNo"],
-  //         gender: data["Gender"],
-  //         occupation: data["Occupation"],
-  //         interest: data["Interest"],
-  //         localUrl: null,
-  //         firebaseUrl: data['ProfilePic'],
+  //         wing: data["Wing"],
   //       );
   //     });
   //     notifyListeners();
@@ -117,6 +112,35 @@ class UserProvider extends ChangeNotifier {
   //     rethrow;
   //   }
   // }
+
+  Future<Users?> getUserDetails(String uid) async {
+    try {
+      CollectionReference users =
+          FirebaseFirestore.instance.collection('Users');
+      Users? user;
+
+      if (uid.isNotEmpty) {
+        uid = uid;
+      }
+      await users.doc(uid.toString()).get().then((DocumentSnapshot query) {
+        Map<String, dynamic> data = query.data() as Map<String, dynamic>;
+        user = Users(
+          id: data["UID"],
+          flatNo: data["FlatNo"],
+          name: data["Name"],
+          email: data["Email"],
+          phone: data["PhoneNo"],
+          wing: data["Wing"],
+          localUrl: null,
+          firebaseUrl: data['ProfilePic'],
+        );
+      });
+      notifyListeners();
+      return user;
+    } catch (e) {
+      rethrow;
+    }
+  }
 
   Future updateUser(Users user) async {
       final prefs = await SharedPreferences.getInstance();

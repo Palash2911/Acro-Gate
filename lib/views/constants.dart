@@ -9,7 +9,7 @@ Color kpostColor = Color(0xfffCFEEE1);
 
 const kAnimationDuration = Duration(milliseconds: 200);
 //  Theme Style
-ThemeData aikyamTheme = ThemeData(
+ThemeData acrogateTheme = ThemeData(
   // textTheme: GoogleFonts.poppinsTextTheme(),
   scaffoldBackgroundColor: ksecondaryColor,
   iconTheme: IconThemeData(color: Color(0xfff1BB273)),

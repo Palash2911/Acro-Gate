@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         initialRoute: '/',
-        theme: aikyamTheme,
+        theme: acrogateTheme,
         routes: approutes,
       ),
     );

@@ -17,7 +17,7 @@ class RoundAppBar extends StatelessWidget {
               bottomRight: Radius.circular(20)),
           color: kprimaryColor),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 40.0),
         child: Text(
           title,
           style: kTextPopB24.copyWith(color: ksecondaryColor),

@@ -1,4 +1,5 @@
 import 'package:acrogate/providers/auth_provider.dart';
+import 'package:acrogate/views/Screens/BottomNav/UserBottomNav.dart';
 import 'package:acrogate/views/Screens/Onboarding/Login.dart';
 import 'package:acrogate/views/Screens/Onboarding/Register.dart';
 import 'package:acrogate/views/constants.dart';
@@ -19,22 +20,20 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    loadScreen();
+    loadScreen(context);
   }
 
-  Future loadScreen() async {
+  Future loadScreen(BuildContext ctx) async {
     var authProvider = Provider.of<Auth>(context, listen: false);
 
     Future.delayed(const Duration(seconds: 2), () async {
-    //   await authProvider.autoLogin().then((_) async {
-    //     if (authProvider.isAuth) {
-    //       var user = await authProvider.checkUser();
-    //
-    //     } else {
-    //       Navigator.of(context).pushReplacementNamed(LogIn.routeName);
-    //     }
-    //   });
-      Navigator.of(context).pushReplacementNamed(LogIn.routeName);
+      await authProvider.autoLogin().then((_) async {
+        if (authProvider.isAuth) {
+          Navigator.of(ctx).pushReplacementNamed(UserBottomBar.routeName);
+        } else {
+          Navigator.of(ctx).pushReplacementNamed(LogIn.routeName);
+        }
+      });
     });
   }
 

@@ -8,6 +8,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
+import '../BottomNav/UserBottomNav.dart';
+
 class OtpScreen extends StatefulWidget {
   static var routeName = "/otp-screen";
 
@@ -87,8 +89,11 @@ class _OtpScreenState extends State<OtpScreen> {
       });
       if (isValid) {
         var user = await authProvider.checkUser();
-        Navigator.of(ctx)
-            .pushReplacementNamed(Register.routeName);
+        if (user) {
+          Navigator.of(ctx).pushReplacementNamed(UserBottomBar.routeName);
+        } else {
+          Navigator.of(ctx).pushReplacementNamed(Register.routeName);
+        }
       } else {
         setState(() {
           isLoading = false;
@@ -123,155 +128,150 @@ class _OtpScreenState extends State<OtpScreen> {
       //           ),
       //         ),
       //       )
-          body : SafeArea(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 24, horizontal: 32),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 32),
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Icon(
+                      Icons.arrow_back_ios_new_rounded,
+                      size: 32,
+                      color: kprimaryColor,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 18,
+                ),
+                SizedBox(
+                  width: 153,
+                  height: 153,
+                  child: Lottie.asset('assets/animation/otp.json'),
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
+                Text('Verification', style: kTextPopB24),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Verification Code on $phoneNo ", //You have to do it
+                  style: kTextPopR14,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 28,
+                ),
+                Container(
+                  padding: const EdgeInsets.all(28),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                   child: Column(
                     children: [
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: GestureDetector(
-                          onTap: () => Navigator.pop(context),
-                          child: Icon(
-                            Icons.arrow_back_ios_new_rounded,
-                            size: 32,
-                            color: kprimaryColor,
+                      TextField(
+                        controller: _otpController,
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.lock),
+                          hintText: 'Enter OTP',
+                          counterText: "",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15.0),
                           ),
                         ),
+                        keyboardType: TextInputType.phone,
+                        maxLength: 6,
                       ),
                       const SizedBox(
                         height: 18,
                       ),
-                      SizedBox(
-                        width: 153,
-                        height: 153,
-                        child: Lottie.asset('assets/animation/otp.json'),
-                      ),
-                      const SizedBox(
-                        height: 24,
-                      ),
-                      Text('Verification', style: kTextPopB24),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        "Verification Code on $phoneNo ", //You have to do it
-                        style: kTextPopR14,
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(
-                        height: 28,
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(28),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          children: [
-                            TextField(
-                              controller: _otpController,
-                              decoration: InputDecoration(
-                                prefixIcon: const Icon(Icons.lock),
-                                hintText: 'Enter OTP',
-                                counterText: "",
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                ),
-                              ),
-                              keyboardType: TextInputType.phone,
-                              maxLength: 6,
-                            ),
-                            const SizedBox(
-                              height: 18,
-                            ),
-                            SizedBox(
-                              width: double.infinity,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    isLoading = true;
-                                  });
-                                  _verifyOtp(context);
-                                },
-                                style: ButtonStyle(
-                                  foregroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          ksecondaryColor),
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          kprimaryColor),
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(24.0),
-                                    ),
-                                  ),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(14.0),
-                                  child: Text('Verify', style: kTextPopM16),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 18,
-                      ),
-                      Text(
-                        "Didn't Receive OTP?",
-                        style: kTextPopR16,
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 18),
                       SizedBox(
                         width: double.infinity,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            InkWell(
-                              onTap: resendVisible
-                                  ? null
-                                  : () {
-                                      _sendOtp(context);
-                                      setState(() {
-                                        resendVisible = true;
-                                      });
-                                    },
-                              child: Text(
-                                "Resend OTP",
-                                style: kTextPopB16.copyWith(
-                                    color: resendVisible
-                                        ? Colors.grey
-                                        : kprimaryColor),
-                                textAlign: TextAlign.center,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              isLoading = true;
+                            });
+                            _verifyOtp(context);
+                          },
+                          style: ButtonStyle(
+                            foregroundColor: MaterialStateProperty.all<Color>(
+                                ksecondaryColor),
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(kprimaryColor),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(24.0),
                               ),
                             ),
-                            InkWell(
-                              child: Text(
-                                "Edit Number",
-                                style:
-                                    kTextPopB16.copyWith(color: kprimaryColor),
-                                textAlign: TextAlign.center,
-                              ),
-                              onTap: () {
-                                Navigator.of(context)
-                                    .pushReplacementNamed(LogIn.routeName);
-                              },
-                            ),
-                          ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(14.0),
+                            child: Text('Verify', style: kTextPopM16),
+                          ),
                         ),
+                      )
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 18,
+                ),
+                Text(
+                  "Didn't Receive OTP?",
+                  style: kTextPopR16,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 18),
+                SizedBox(
+                  width: double.infinity,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      InkWell(
+                        onTap: resendVisible
+                            ? null
+                            : () {
+                                _sendOtp(context);
+                                setState(() {
+                                  resendVisible = true;
+                                });
+                              },
+                        child: Text(
+                          "Resend OTP",
+                          style: kTextPopB16.copyWith(
+                              color:
+                                  resendVisible ? Colors.grey : kprimaryColor),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      InkWell(
+                        child: Text(
+                          "Edit Number",
+                          style: kTextPopB16.copyWith(color: kprimaryColor),
+                          textAlign: TextAlign.center,
+                        ),
+                        onTap: () {
+                          Navigator.of(context)
+                              .pushReplacementNamed(LogIn.routeName);
+                        },
                       ),
                     ],
                   ),
                 ),
-              ),
+              ],
             ),
+          ),
+        ),
+      ),
     );
   }
 }

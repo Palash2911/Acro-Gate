@@ -110,7 +110,9 @@ class Auth extends ChangeNotifier {
   Future<void> signOut() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear().then((value) async {
-      await _auth.signOut();
+      if (value) {
+        await _auth.signOut();
+      }
     });
     notifyListeners();
   }
