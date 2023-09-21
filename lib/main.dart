@@ -1,7 +1,7 @@
 import 'package:acrogate/providers/auth_provider.dart';
+import 'package:acrogate/providers/entry_provider.dart';
 import 'package:acrogate/providers/user_provider.dart';
 import 'package:acrogate/routes.dart';
-import 'package:acrogate/views/Screens/Onboarding/Register.dart';
 import 'package:acrogate/views/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +25,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (BuildContext context) => UserProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (BuildContext context) => EntryProvider(),
         ),
       ],
       child: MaterialApp(

@@ -374,31 +374,43 @@ class _RegisterState extends State<Register> {
                               ],
                             ),
                             const SizedBox(height: 15.0),
-                            SizedBox(
-                              width: 200,
-                              child: DropdownButton<String>(
-                                value: selectedFlat.isNotEmpty ? selectedFlat : "",
-                                hint: Text("Select Flat", style: kTextPopR14),
-                                onChanged: (String? newValue) {
-                                  setState(() {
-                                    selectedFlat = newValue ?? "";
-                                  });
-                                },
-                                items: flats.map((String item) {
-                                  return DropdownMenuItem<String>(
-                                    value: item,
-                                    child: Text(item, style: kTextPopR14),
-                                  );
-                                }).toList(),
-                                style: kTextPopR14.copyWith(color: Colors.black),
-                                icon: const Icon(Icons.arrow_drop_down),
-                                isExpanded: true,
-                                underline: Container(
-                                  height: 2,
-                                  color: Colors.green,
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.room,
+                                  size: 32.0,
+                                  color: Colors.grey,
                                 ),
-                                elevation: 2,
-                              ),
+                                const SizedBox(width: 12.0),
+                                Container(
+                                  padding: const EdgeInsets.only(left: 9.0),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: kprimaryColor, width: 2.0),
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  width: MediaQuery.of(context).size.width * 0.44,
+                                  child: DropdownButton<String>(
+                                    value: selectedFlat.isNotEmpty ? selectedFlat : "",
+                                    hint: Text("Select Flat", style: kTextPopR14),
+                                    onChanged: (String? newValue) {
+                                      setState(() {
+                                        selectedFlat = newValue ?? "";
+                                      });
+                                    },
+                                    items: flats.map((String item) {
+                                      return DropdownMenuItem<String>(
+                                        value: item,
+                                        child: Text(item, style: kTextPopR14),
+                                      );
+                                    }).toList(),
+                                    style: kTextPopR14.copyWith(color: Colors.black),
+                                    icon: const Icon(IconData(0)),
+                                    isExpanded: true,
+                                    underline: Container(),
+                                    elevation: 2,
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(height: 15.0),
                             SizedBox(

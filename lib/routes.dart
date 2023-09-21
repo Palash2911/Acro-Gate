@@ -1,3 +1,4 @@
+import 'package:acrogate/views/Screens/AdminSide.dart';
 import 'package:acrogate/views/Screens/BottomNav/UserBottomNav.dart';
 import 'package:acrogate/views/Screens/Onboarding/Login.dart';
 import 'package:acrogate/views/Screens/Onboarding/OTP.dart';
@@ -18,4 +19,7 @@ var approutes = <String, WidgetBuilder>{
 
   //User Routes
   UserBottomBar.routeName: (context) => const UserBottomBar(),
+
+  //Admin Side
+  AdminSide.routeName: (context) => const AdminSide(),
 };

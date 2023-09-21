@@ -2,10 +2,6 @@ import 'package:acrogate/views/Screens/Cards/HomepageCard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
-
-import '../../../providers/auth_provider.dart';
-import '../../../providers/user_provider.dart';
 import '../../constants.dart';
 
 class HomePage extends StatefulWidget {

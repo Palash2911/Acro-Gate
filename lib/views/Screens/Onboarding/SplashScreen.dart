@@ -1,7 +1,6 @@
 import 'package:acrogate/providers/auth_provider.dart';
 import 'package:acrogate/views/Screens/BottomNav/UserBottomNav.dart';
 import 'package:acrogate/views/Screens/Onboarding/Login.dart';
-import 'package:acrogate/views/Screens/Onboarding/Register.dart';
 import 'package:acrogate/views/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:acrogate/views/widgets/SizeConfig.dart';
