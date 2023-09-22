@@ -47,7 +47,7 @@ class _AdminCardState extends State<AdminCard> {
           Entry(
             flatId: "",
             dname: name,
-            status: false,
+            status: "Pending",
             flatNo: selectedFlat,
             wing: wing,
           ),
@@ -60,7 +60,9 @@ class _AdminCardState extends State<AdminCard> {
             textColor: Colors.white,
             fontSize: 16.0,
           );
-        }).then((_) async {
+        }).then((res) async {
+          if(res)
+            {
               Fluttertoast.showToast(
                 msg: "Request Sent Successfully!",
                 toastLength: Toast.LENGTH_SHORT,
@@ -75,6 +77,18 @@ class _AdminCardState extends State<AdminCard> {
                 wings.forEach((wing) => wing.isSelected = false);
                 wing = ""; // Optionally clear the selected wing
               });
+            }
+          else
+            {
+              Fluttertoast.showToast(
+                msg: "Flat Not Found !!",
+                toastLength: Toast.LENGTH_SHORT,
+                timeInSecForIosWeb: 1,
+                backgroundColor: kprimaryColor,
+                textColor: Colors.white,
+                fontSize: 16.0,
+              );
+            }
         });
     } else {
       // setState(() {

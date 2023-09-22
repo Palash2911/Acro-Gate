@@ -56,15 +56,14 @@ class _AdminSideState extends State<AdminSide> {
                             child: Column(
                               children: [
                                 SizedBox(
-                                  height: 300.0,
+                                  height: 130.0,
                                   child: Image.asset(
                                     'assets/images/noPost.png',
                                     fit: BoxFit.contain,
                                   ),
                                 ),
-                                const SizedBox(height: 20.0),
                                 Text(
-                                  "No Flats Listed Yet !",
+                                  "No Entries Yet !",
                                   style: kTextPopM16,
                                 ),
                               ],

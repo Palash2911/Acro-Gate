@@ -6,7 +6,7 @@ class AdminListCard extends StatelessWidget {
   final String dname;
   final String flatNo;
   final String wing;
-  final bool approve;
+  final String approve;
 
   AdminListCard({
     required this.dname,
@@ -40,7 +40,7 @@ class AdminListCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
-                  !approve ? "Pending" : "Approved",
+                  approve,
                   style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
                   overflow: TextOverflow.ellipsis,
                 ),

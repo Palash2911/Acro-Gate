@@ -1,6 +1,10 @@
+import 'package:acrogate/views/Screens/Cards/NotificationCard.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 
+import '../../../providers/auth_provider.dart';
 import '../../constants.dart';
 
 class History extends StatefulWidget {
@@ -11,20 +15,19 @@ class History extends StatefulWidget {
 }
 
 class _HistoryState extends State<History> {
+  CollectionReference entryRef = FirebaseFirestore.instance.collection('Users');
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _getEntry();
+  }
 
   Future<void> _getEntry() async {
-    // var authToken = Provider.of<Auth>(context, listen: false).token;
-    // await Provider.of<UserProvider>(context, listen: false)
-    //     .getUserDetails(authToken)
-    //     .then((value) {
-    //   setState(() {
-    //     name = value!.name;
-    //     uid = value.id;
-    //     flatNo = value.flatNo;
-    //     wing = value.wing;
-    //     url = value.firebaseUrl;
-    //   });
-    // });
+    var authToken = Provider.of<Auth>(context, listen: false).token;
+    setState(() {
+      entryRef = entryRef.doc(authToken).collection("Entries");
+    });
   }
 
   @override
@@ -34,27 +37,63 @@ class _HistoryState extends State<History> {
         title: const Padding(
           padding: const EdgeInsets.fromLTRB(12.0, 2.0, 0.0, 0.0),
           child: Text(
-            'History',
+            'Notifications',
           ),
         ),
       ),
       body: RefreshIndicator(
         onRefresh: _getEntry,
-        child: Center(
+        child: Container(
+          height: MediaQuery.of(context).size.height -
+              kBottomNavigationBarHeight,
+          padding: const EdgeInsets.only(left: 18, right: 18, top: 5, bottom: 10),
           child: Column(
             children: [
               const SizedBox(height: 30.0),
-              SizedBox(
-                height: 300.0,
-                child: Image.asset(
-                  'assets/images/noPost.png',
-                  fit: BoxFit.contain,
+              Expanded(
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: entryRef.snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else {
+                      if (snapshot.data!.docs.isEmpty) {
+                        return Center(
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 300.0,
+                                child: Image.asset(
+                                  'assets/images/noPost.png',
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                              const SizedBox(height: 20.0),
+                              Text(
+                                "No Notifications Yet !",
+                                style: kTextPopM16,
+                              ),
+                            ],
+                          ),
+                        );
+                      } else {
+                        return ListView(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          children: snapshot.data!.docs.map((document) {
+                            return NotificationCard(
+                              DName: document['DName'],
+                              nid: document.id,
+                              status: document['Approve'],
+                            );
+                          }).toList(),
+                        );
+                      }
+                    }
+                  },
                 ),
-              ),
-              const SizedBox(height: 10.0),
-              Text(
-                "No Recent Entries Yet !",
-                style: kTextPopM16,
               ),
             ],
           ),

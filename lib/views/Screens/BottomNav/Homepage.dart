@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage> {
                 child: Container(
                   height: MediaQuery.of(context).size.height -
                       kBottomNavigationBarHeight,
-                  padding: const EdgeInsets.only(bottom: 120),
+                  padding: const EdgeInsets.only(bottom: 40, top: 20),
                   child: RefreshIndicator(
                     onRefresh: _getData,
                     child: Column(

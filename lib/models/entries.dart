@@ -4,7 +4,7 @@ class Entry {
   String flatId;
   final String flatNo;
   final String dname;
-  final bool status;
+  final String status;
   final String wing;
 
   Entry({

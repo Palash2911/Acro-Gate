@@ -28,34 +28,43 @@ class HomePageCard extends StatelessWidget {
         children: [
           Container(
             margin: const EdgeInsets.only(right: 12.0),
-            height: 60.0,
-            width: 60.0,
+            height: 40.0,
+            width: 40.0,
             child: CircleAvatar(
               radius: 30.0,
               backgroundImage: imageUrl.isNotEmpty
                   ? Image.network(imageUrl).image
-                  : const AssetImage('assets/images/male.png'),
+                  : const AssetImage('assets/images/calling.png'),
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                name,
-                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-                overflow: TextOverflow.ellipsis,
-              ),
-              Text(
-                'Flat No: $flatNo',
-                style: TextStyle(fontSize: 14.0),
-                overflow: TextOverflow.ellipsis,
-              ),
-              Text(
-                'Wing: $wing-Wing',
-                style: TextStyle(fontSize: 14.0),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
+          const SizedBox(width: 9,),
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.60,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  name,
+                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Flat No: $flatNo',
+                      style: TextStyle(fontSize: 14.0),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      'Wing: $wing-Wing',
+                      style: TextStyle(fontSize: 14.0),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ],
       ),

@@ -1,3 +1,4 @@
+import 'package:acrogate/views/Screens/AdminSide.dart';
 import 'package:acrogate/views/Screens/Onboarding/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -50,15 +51,7 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return !dataLoaded
-        ? Container(
-            alignment: Alignment.center,
-            height: double.infinity,
-            width: double.infinity,
-            child: SizedBox(
-              height: 500.0,
-              child: Lottie.asset('assets/animations/loading.json'),
-            ),
-          )
+        ? const CircularProgressIndicator()
         : Scaffold(
             appBar: AppBar(
               title: const Padding(
@@ -163,7 +156,11 @@ class _ProfileState extends State<Profile> {
                               trailing:
                                   const Icon(Icons.arrow_forward_ios_rounded),
                               onTap: () {
-                                // TODO
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (context) => AdminSide(),
+                                  ),
+                                );
                               },
                             ),
                           ),

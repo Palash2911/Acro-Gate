@@ -48,12 +48,12 @@ List<PersistentBottomNavBarItem> _navBarsItems() {
         activeColorPrimary: kprimaryColor,
         inactiveColorPrimary: kprimaryColor),
     PersistentBottomNavBarItem(
-      icon: Icon(Icons.timelapse_sharp),
-      title: ("History"),
+      icon: Icon(Icons.doorbell_outlined),
+      title: ("Notifications"),
       activeColorPrimary: kprimaryColor,
     ),
     PersistentBottomNavBarItem(
-        icon: Icon(Icons.person),
+        icon: Icon(Icons.person_4_outlined),
         title: ("Profile"),
         activeColorPrimary: kprimaryColor,
         inactiveColorPrimary: kprimaryColor),
