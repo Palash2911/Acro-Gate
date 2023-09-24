@@ -1,4 +1,5 @@
 import 'package:acrogate/views/Screens/AdminSide.dart';
+import 'package:acrogate/views/Screens/BottomNav/Editprofile.dart';
 import 'package:acrogate/views/Screens/BottomNav/UserBottomNav.dart';
 import 'package:acrogate/views/Screens/Onboarding/Login.dart';
 import 'package:acrogate/views/Screens/Onboarding/OTP.dart';
@@ -22,4 +23,7 @@ var approutes = <String, WidgetBuilder>{
 
   //Admin Side
   AdminSide.routeName: (context) => const AdminSide(),
+
+  //Edit Profile
+  EditProfile.routeName: (context) => const EditProfile(),
 };

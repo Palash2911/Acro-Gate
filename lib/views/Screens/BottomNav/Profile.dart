@@ -1,10 +1,12 @@
 import 'package:acrogate/views/Screens/AdminSide.dart';
+import 'package:acrogate/views/Screens/BottomNav/Editprofile.dart';
 import 'package:acrogate/views/Screens/Onboarding/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/auth_provider.dart';
+import '../../../providers/user_provider.dart';
 import '../../constants.dart';
 import '../Cards/ProfileCard.dart';
 
@@ -40,7 +42,7 @@ class _ProfileState extends State<Profile> {
         textColor: Colors.white,
         fontSize: 16.0,
       );
-      Navigator.of(ctx).pushReplacement(
+      Navigator.of(ctx, rootNavigator: true).pushReplacement(
         MaterialPageRoute(
           builder: (context) => LogIn(),
         ),
@@ -48,10 +50,33 @@ class _ProfileState extends State<Profile> {
     });
   }
 
+  Future<void> editProfile() async {
+    var authToken = Provider.of<Auth>(context, listen: false).token;
+    await Provider.of<UserProvider>(context, listen: false)
+        .getUserDetails(authToken)
+        .then((value) {
+      Navigator.of(context, rootNavigator: true)
+          .pushNamed(EditProfile.routeName, arguments: [
+        value!.id,
+        value.name,
+        value.flatNo,
+        value.wing,
+        value.email,
+        value.phone,
+        value.firebaseUrl,
+      ]);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return !dataLoaded
-        ? const CircularProgressIndicator()
+        ? Container(
+            alignment: Alignment.center,
+            height: double.infinity,
+            width: double.infinity,
+            child: const CircularProgressIndicator(),
+          )
         : Scaffold(
             appBar: AppBar(
               title: const Padding(
@@ -99,13 +124,11 @@ class _ProfileState extends State<Profile> {
                               subtitle: const Text('Edit Profile'),
                               trailing:
                                   const Icon(Icons.arrow_forward_ios_rounded),
-                              onTap: () {
-                                print("Clicked");
-                              },
+                              onTap: editProfile,
                             ),
                           ),
                           //Sign Out
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           Card(
@@ -131,7 +154,7 @@ class _ProfileState extends State<Profile> {
                               onTap: () => signOut(context),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           Card(

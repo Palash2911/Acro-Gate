@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../constants.dart';
 
@@ -7,13 +8,20 @@ class HomePageCard extends StatelessWidget {
   final String flatNo;
   final String wing;
   final String imageUrl;
+  final String number;
 
   HomePageCard({
     required this.name,
     required this.flatNo,
     required this.wing,
     required this.imageUrl,
+    required this.number,
   });
+
+  Future launchDialer() async {
+    String url = 'tel:$number';
+    await launch(url);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,15 +34,16 @@ class HomePageCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Container(
-            margin: const EdgeInsets.only(right: 12.0),
-            height: 40.0,
-            width: 40.0,
-            child: CircleAvatar(
-              radius: 30.0,
-              backgroundImage: imageUrl.isNotEmpty
-                  ? Image.network(imageUrl).image
-                  : const AssetImage('assets/images/calling.png'),
+          GestureDetector(
+            onTap: launchDialer,
+            child: Container(
+              margin: const EdgeInsets.only(right: 12.0),
+              height: 40.0,
+              width: 40.0,
+              child: const CircleAvatar(
+                radius: 30.0,
+                backgroundImage: AssetImage('assets/images/calling.png'),
+              ),
             ),
           ),
           const SizedBox(width: 9,),
@@ -45,7 +54,7 @@ class HomePageCard extends StatelessWidget {
               children: [
                 Text(
                   name,
-                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
                   overflow: TextOverflow.ellipsis,
                 ),
                 Column(

@@ -35,7 +35,7 @@ class _HistoryState extends State<History> {
     return Scaffold(
       appBar: AppBar(
         title: const Padding(
-          padding: const EdgeInsets.fromLTRB(12.0, 2.0, 0.0, 0.0),
+          padding: EdgeInsets.fromLTRB(12.0, 2.0, 0.0, 0.0),
           child: Text(
             'Notifications',
           ),
@@ -59,9 +59,19 @@ class _HistoryState extends State<History> {
                         child: CircularProgressIndicator(),
                       );
                     } else {
-                      if (snapshot.data!.docs.isEmpty) {
-                        return Center(
-                          child: Column(
+                      return ListView(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        children: snapshot.data!.docs.isNotEmpty // Check if there's data
+                            ? snapshot.data!.docs.map((document) {
+                          return NotificationCard(
+                            DName: document['DName'],
+                            nid: document.id,
+                            status: document['Approve'],
+                          );
+                        }).toList()
+                            : [ 
+                          Column(
                             children: [
                               SizedBox(
                                 height: 300.0,
@@ -77,20 +87,9 @@ class _HistoryState extends State<History> {
                               ),
                             ],
                           ),
-                        );
-                      } else {
-                        return ListView(
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          children: snapshot.data!.docs.map((document) {
-                            return NotificationCard(
-                              DName: document['DName'],
-                              nid: document.id,
-                              status: document['Approve'],
-                            );
-                          }).toList(),
-                        );
-                      }
+                        ],
+                      );
+
                     }
                   },
                 ),

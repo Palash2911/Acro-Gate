@@ -68,9 +68,18 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  Future updateFlat(Flats flats) async {
+  Future updateFlat(Flats flats, String oldFlatno, String oldWing) async {
     try {
       CollectionReference flat = FirebaseFirestore.instance.collection('Flats');
+
+      final querySnapshot = await flat
+          .where('FlatNo', isEqualTo: oldFlatno)
+          .where('Wing', isEqualTo: oldWing)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        flats.flatId = querySnapshot.docs[0].id;
+      }
 
       await flat.doc(flats.flatId).update({
         "Name": flats.oname,
@@ -87,38 +96,11 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  // Future<Users?> getFlatDetails(String uid) async {
-  //   try {
-  //     CollectionReference flats =
-  //         FirebaseFirestore.instance.collection('Flats');
-  //     Flats? flat;
-  //
-  //     if (uid.isNotEmpty) {
-  //       uid = uid;
-  //     }
-  //     await flats.doc(uid.toString()).get().then((DocumentSnapshot query) {
-  //       Map<String, dynamic> data = query.data() as Map<String, dynamic>;
-  //       flat = Flats(
-  //         flatId: data["UID"],
-  //         flatNo: data["FlatNo"],
-  //         oname: data["Name"],
-  //         phone: data["PhoneNo"],
-  //         wing: data["Wing"],
-  //       );
-  //     });
-  //     notifyListeners();
-  //     return user;
-  //   } catch (e) {
-  //     rethrow;
-  //   }
-  // }
-
   Future<Users?> getUserDetails(String uid) async {
     try {
       CollectionReference users =
-          FirebaseFirestore.instance.collection('Users');
+      FirebaseFirestore.instance.collection('Users');
       Users? user;
-
       if (uid.isNotEmpty) {
         uid = uid;
       }
@@ -142,7 +124,7 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  Future updateUser(Users user) async {
+  Future updateUser(Users user, String oldFlatno, String oldWing) async {
       final prefs = await SharedPreferences.getInstance();
     try {
       if (user.localUrl != null) {
@@ -166,6 +148,7 @@ class UserProvider extends ChangeNotifier {
       });
       prefs.setString('ProfilePic', user.firebaseUrl);
       prefs.setString("UserName", user.name);
+      updateFlat(Flats(flatId: "", flatNo: user.flatNo, oname: user.name, phone: user.phone, wing: user.wing), oldFlatno, oldWing);
       notifyListeners();
     } catch (e) {
       rethrow;

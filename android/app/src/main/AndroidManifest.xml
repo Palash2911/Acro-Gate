@@ -1,6 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.acrogate">
-   <application
+
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
+    <application
         android:label="AcroGate"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">

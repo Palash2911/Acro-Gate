@@ -49,6 +49,7 @@ dependencies:
   google_fonts: ^4.0.4
   image_picker: ^0.8.6+4
   persistent_bottom_nav_bar: any
+  url_launcher: ^6.1.14
 
 dev_dependencies:
   flutter_test:

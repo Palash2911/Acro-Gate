@@ -47,10 +47,7 @@ class _HomePageState extends State<HomePage> {
             alignment: Alignment.center,
             height: double.infinity,
             width: double.infinity,
-            child: SizedBox(
-              height: 500.0,
-              child: Lottie.asset('assets/animations/loading.json'),
-            ),
+            child: const CircularProgressIndicator(),
           )
         : Scaffold(
             appBar: AppBar(
@@ -110,6 +107,7 @@ class _HomePageState extends State<HomePage> {
                                         flatNo: document['FlatNo'],
                                         wing: document['Wing'],
                                         imageUrl: '',
+                                        number: document['PhoneNo'],
                                       );
                                     }).toList(),
                                   );
