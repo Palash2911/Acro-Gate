@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:acrogate/models/entries.dart';
 import 'package:acrogate/providers/entry_provider.dart';
+import 'package:acrogate/providers/firebasenotification.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import '../../../providers/auth_provider.dart';
 import '../../constants.dart';
+import 'package:http/http.dart' as http;
 
 class AdminCard extends StatefulWidget {
   const AdminCard({Key? key}) : super(key: key);
@@ -13,16 +18,61 @@ class AdminCard extends StatefulWidget {
 }
 
 class _AdminCardState extends State<AdminCard> {
-
   String wing = "";
   late String selectedFlat;
   final _nameController = TextEditingController();
   String get name => _nameController.text;
   final _form = GlobalKey<FormState>();
-
   List<Wing> wings = [];
+  var firebaseNoti = FirebaseNotification();
 
-  List<String> flats = ["Select Flat No", "1001", "1002", "1003", "1004", "2001", "2002", "2003", "2004", "3001", "3002", "3003", "3004", "4001", "4002", "4003", "4004", "5001", "5002", "5003", "5004", "6001", "6002", "6003", "6004", "7001", "7002", "7003", "7004", "8001", "8002", "8003", "8004", "9001", "9002", "9003", "9004", "1101", "1102", "1103", "1104", "1201", "1202", "1203", "1204"];
+  List<String> flats = [
+    "Select Flat No",
+    "1001",
+    "1002",
+    "1003",
+    "1004",
+    "2001",
+    "2002",
+    "2003",
+    "2004",
+    "3001",
+    "3002",
+    "3003",
+    "3004",
+    "4001",
+    "4002",
+    "4003",
+    "4004",
+    "5001",
+    "5002",
+    "5003",
+    "5004",
+    "6001",
+    "6002",
+    "6003",
+    "6004",
+    "7001",
+    "7002",
+    "7003",
+    "7004",
+    "8001",
+    "8002",
+    "8003",
+    "8004",
+    "9001",
+    "9002",
+    "9003",
+    "9004",
+    "1101",
+    "1102",
+    "1103",
+    "1104",
+    "1201",
+    "1202",
+    "1203",
+    "1204"
+  ];
 
   @override
   void initState() {
@@ -34,6 +84,16 @@ class _AdminCardState extends State<AdminCard> {
     wings.add(Wing("C", Icons.battery_full, false));
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    notificationSettings();
+  }
+
+  Future notificationSettings() async {
+    firebaseNoti.onTokenRefresh();
+  }
+
   Future _createEntry(BuildContext ctx) async {
     var entryProvider = Provider.of<EntryProvider>(ctx, listen: false);
     final isValid = _form.currentState!.validate();
@@ -42,54 +102,89 @@ class _AdminCardState extends State<AdminCard> {
     // });
     _form.currentState!.save();
     if (isValid) {
-        await
-            entryProvider.newEntry(
-          Entry(
-            flatId: "",
-            dname: name,
-            status: "Pending",
-            flatNo: selectedFlat,
-            wing: wing,
-          ),
-        ).catchError((e) {
+      await entryProvider
+          .newEntry(
+        Entry(
+          flatId: "",
+          dname: name,
+          status: "Pending",
+          flatNo: selectedFlat,
+          wing: wing,
+        ),
+      )
+          .catchError((e) {
+        Fluttertoast.showToast(
+          msg: "Something went wrong!",
+          toastLength: Toast.LENGTH_SHORT,
+          timeInSecForIosWeb: 1,
+          backgroundColor: kprimaryColor,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+      }).then((res) async {
+        if (res) {
+          entryProvider.getToken(selectedFlat, wing).then((String fcmt) async {
+            print('FCMToken: $fcmt');
+            if (fcmt.isNotEmpty) {
+              var data = {
+                'to': fcmt,
+                'notification': {
+                  'title': 'Some One At Door 🚪',
+                  'body': 'Please Approve Entry !!',
+                }
+              };
+              print(data);
+              try {
+                final response = await http.post(
+                  Uri.parse("https://fcm.googleapis.com/fcm/send"),
+                  body: jsonEncode(data),
+                  headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    'Authorization':
+                        'key=AAAAOSftUfs:APA91bGK8JoiHH2WsJHz4HZA8PgWq_Ai7TcKCmhq-mbDTzV0wkUrVCFSewOnxlQ4H5uYzdl6PuNoMVhaZhTLzu3uzSZ6WYS_UhfwEEIEQFwhUp6JZWUDGzmKCKEUQUUhYq5F98k8Up_I', // Replace with your server key
+                  },
+                );
+
+                if (response.statusCode == 200) {
+                  print("Notification sent successfully");
+                  print(response.body);
+                } else {
+                  print(
+                      "Failed to send notification. Status code: ${response.statusCode}");
+                  print(response.body);
+                }
+              } catch (e) {
+                print("Error sending notification: $e");
+              }
+            }
+          }).catchError((e) {
+            print(e);
+          });
           Fluttertoast.showToast(
-            msg: "Something went wrong!",
+            msg: "Request Sent Successfully!",
             toastLength: Toast.LENGTH_SHORT,
             timeInSecForIosWeb: 1,
             backgroundColor: kprimaryColor,
             textColor: Colors.white,
             fontSize: 16.0,
           );
-        }).then((res) async {
-          if(res)
-            {
-              Fluttertoast.showToast(
-                msg: "Request Sent Successfully!",
-                toastLength: Toast.LENGTH_SHORT,
-                timeInSecForIosWeb: 1,
-                backgroundColor: kprimaryColor,
-                textColor: Colors.white,
-                fontSize: 16.0,
-              );
-              _nameController.text = "";
-              selectedFlat = flats[0];
-              setState(() {
-                wings.forEach((wing) => wing.isSelected = false);
-                wing = ""; // Optionally clear the selected wing
-              });
-            }
-          else
-            {
-              Fluttertoast.showToast(
-                msg: "Flat Not Found !!",
-                toastLength: Toast.LENGTH_SHORT,
-                timeInSecForIosWeb: 1,
-                backgroundColor: kprimaryColor,
-                textColor: Colors.white,
-                fontSize: 16.0,
-              );
-            }
-        });
+          _nameController.text = "";
+          selectedFlat = flats[0];
+          setState(() {
+            wings.forEach((wing) => wing.isSelected = false);
+            wing = ""; // Optionally clear the selected wing
+          });
+        } else {
+          Fluttertoast.showToast(
+            msg: "Flat Not Found !!",
+            toastLength: Toast.LENGTH_SHORT,
+            timeInSecForIosWeb: 1,
+            backgroundColor: kprimaryColor,
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+        }
+      });
     } else {
       // setState(() {
       //   isLoading = false;
@@ -175,32 +270,28 @@ class _AdminCardState extends State<AdminCard> {
                                         onTap: () {
                                           setState(() {
                                             wings.forEach((wing) =>
-                                            wing.isSelected =
-                                            false);
-                                            wings[index].isSelected =
-                                            true;
-                                            wing =
-                                                wings[index].wing;
+                                                wing.isSelected = false);
+                                            wings[index].isSelected = true;
+                                            wing = wings[index].wing;
                                           });
                                         },
                                         child: Container(
-                                          margin: const EdgeInsets.only(
-                                              right: 6),
+                                          margin:
+                                              const EdgeInsets.only(right: 6),
                                           child: Chip(
                                             label: Text(
                                               wings[index].wing,
                                               style: TextStyle(
                                                   fontSize: 12,
-                                                  color: !wings[index]
-                                                      .isSelected
-                                                      ? Colors.green
-                                                      : Colors.white),
+                                                  color:
+                                                      !wings[index].isSelected
+                                                          ? Colors.green
+                                                          : Colors.white),
                                             ),
                                             backgroundColor:
-                                            !wings[index]
-                                                .isSelected
-                                                ? Colors.white
-                                                : Colors.green,
+                                                !wings[index].isSelected
+                                                    ? Colors.white
+                                                    : Colors.green,
                                           ),
                                         ),
                                       );
@@ -223,7 +314,8 @@ class _AdminCardState extends State<AdminCard> {
                         Container(
                           padding: const EdgeInsets.only(left: 9.0),
                           decoration: BoxDecoration(
-                            border: Border.all(color: kprimaryColor, width: 2.0),
+                            border:
+                                Border.all(color: kprimaryColor, width: 2.0),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           width: MediaQuery.of(context).size.width * 0.44,
@@ -256,13 +348,11 @@ class _AdminCardState extends State<AdminCard> {
                       width: 200, //width of button
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            primary:
-                            kprimaryColor, //background color of button
-                            shape: RoundedRectangleBorder(
+                          primary: kprimaryColor, //background color of button
+                          shape: RoundedRectangleBorder(
                               //to set border radius to button
-                                borderRadius:
-                                BorderRadius.circular(10)),
-                             //content padding inside button
+                              borderRadius: BorderRadius.circular(10)),
+                          //content padding inside button
                         ),
                         onPressed: () => _createEntry(context),
                         child: const Text(

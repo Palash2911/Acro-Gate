@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:acrogate/models/users.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -44,6 +45,21 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
+  Future updateToken(String token, String uid) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    try {
+      CollectionReference users = FirebaseFirestore.instance.collection('Users');
+      await users.doc(uid).update({
+        "FcmToken": token
+      });
+      prefs.setString("FCMT", token);
+      notifyListeners();
+    } catch (e) {
+      notifyListeners();
+      rethrow;
+    }
+  }
 
   Future registerFlat(Flats flats) async {
     try {

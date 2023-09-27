@@ -1,4 +1,5 @@
 import 'package:acrogate/providers/auth_provider.dart';
+import 'package:acrogate/providers/user_provider.dart';
 import 'package:acrogate/views/Screens/Onboarding/Login.dart';
 import 'package:acrogate/views/Screens/Onboarding/Register.dart';
 import 'package:acrogate/views/constants.dart';
@@ -8,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
+import '../../../providers/firebasenotification.dart';
 import '../BottomNav/UserBottomNav.dart';
 
 class OtpScreen extends StatefulWidget {
@@ -89,11 +91,14 @@ class _OtpScreenState extends State<OtpScreen> {
       });
       if (isValid) {
         var user = await authProvider.checkUser();
-        if (user) {
-          Navigator.of(ctx).pushReplacementNamed(UserBottomBar.routeName);
-        } else {
-          Navigator.of(ctx).pushReplacementNamed(Register.routeName);
-        }
+        var fcmT = await FirebaseNotification().getToken();
+        await Provider.of<UserProvider>(context, listen: false).updateToken(fcmT.toString(), authProvider.token).then((value) {
+          if (user) {
+            Navigator.of(ctx).pushReplacementNamed(UserBottomBar.routeName);
+          } else {
+            Navigator.of(ctx).pushReplacementNamed(Register.routeName);
+          }
+        });
       } else {
         setState(() {
           isLoading = false;

@@ -10,9 +10,14 @@ class Auth extends ChangeNotifier {
   var verificationId = '';
   var _profileCreated = false;
   var _uName = "";
+  var _fcmToken = "";
 
   bool get isAuth {
     return _auth.currentUser?.uid != null ? true : false;
+  }
+
+  String get fcmToken {
+    return _fcmToken;
   }
 
   String get uName {
@@ -72,6 +77,7 @@ class Auth extends ChangeNotifier {
       prefs.setBool('Profile', false);
       prefs.setString('ProfilePic', "");
       prefs.setString("UserName", "");
+      prefs.setString("FCMT", "");
       notifyListeners();
       return cred.user != null ? true : false;
     } catch (e) {
@@ -126,7 +132,9 @@ class Auth extends ChangeNotifier {
     _profileCreated = prefs.getBool('Profile')!;
     _profilePic = prefs.getString('ProfilePic')!;
     _uName = prefs.getString("UserName")!;
-
+    if (prefs.getString("FCMT") != null) {
+      _fcmToken = prefs.getString("FCMT")!;
+    }
     notifyListeners();
   }
 }

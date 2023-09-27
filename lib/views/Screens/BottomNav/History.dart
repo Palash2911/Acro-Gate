@@ -70,7 +70,7 @@ class _HistoryState extends State<History> {
                             status: document['Approve'],
                           );
                         }).toList()
-                            : [ 
+                            : [
                           Column(
                             children: [
                               SizedBox(

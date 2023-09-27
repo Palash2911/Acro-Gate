@@ -42,6 +42,29 @@ class EntryProvider extends ChangeNotifier {
     }
   }
 
+  Future<String> getToken(flatNo, wing) async {
+    try {
+      CollectionReference user = FirebaseFirestore.instance.collection('Users');
+
+      var flatId = "";
+
+      final querySnapshot = await user
+          .where('FlatNo', isEqualTo: flatNo)
+          .where('Wing', isEqualTo: wing)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        var token= querySnapshot.docs[0]['FcmToken'];
+        return token; // Document found
+      } else {
+        return ''; // Document not found
+      }
+    } catch (e) {
+      print('Error: $e');
+      return ''; // Document not found (due to error)
+    }
+  }
+
   Future acceptRejectUser(String ar, String eid, String fid) async {
     DocumentReference entry =
         FirebaseFirestore.instance.collection('Entries').doc(eid);
