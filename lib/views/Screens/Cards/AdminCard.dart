@@ -136,7 +136,7 @@ class _AdminCardState extends State<AdminCard> {
           status: "Pending",
           flatNo: selectedFlat,
           wing: wing,
-          phone: '',
+          phone: phone,
           firebaseUrl: '',
           date: DateTime.now().toString(),
         ),

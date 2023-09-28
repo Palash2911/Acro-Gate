@@ -28,17 +28,17 @@ class _SplashScreenState extends State<SplashScreen> {
     var authProvider = Provider.of<Auth>(context, listen: false);
 
     Future.delayed(const Duration(seconds: 2), () async {
-      await authProvider.autoLogin().then((_) async {
-        if (authProvider.token == "6RSj6M3qYAYLXkICEOYvNsIkAgE2") {
-          Navigator.of(ctx).pushReplacementNamed(AdminSide.routeName);
-        } else {
-          if (authProvider.isAuth) {
-            Navigator.of(ctx).pushReplacementNamed(UserBottomBar.routeName);
-          } else {
-            Navigator.of(ctx).pushReplacementNamed(LogIn.routeName);
-          }
-        }
-      });
+      // await authProvider.autoLogin().then((_) async {
+      //   if (authProvider.token == "6RSj6M3qYAYLXkICEOYvNsIkAgE2") {
+      //     Navigator.of(ctx).pushReplacementNamed(AdminSide.routeName);
+      //   } else {
+      //     if (authProvider.isAuth) {
+      //       Navigator.of(ctx).pushReplacementNamed(UserBottomBar.routeName);
+      //     } else {
+      //       Navigator.of(ctx).pushReplacementNamed(LogIn.routeName);
+      //     }
+      //   }
+      // });
     });
   }
 
@@ -48,14 +48,20 @@ class _SplashScreenState extends State<SplashScreen> {
     SizeConfig().init(context);
     return Scaffold(
       backgroundColor: ksecondaryColor,
-      body: Center(
-        child: SizedBox(
-          height: 350.0,
-          child: Image.asset(
-            'assets/animation/splash.gif',
-            fit: BoxFit.contain,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(
+            child: SizedBox(
+              height: 450.0,
+              child: Image.asset(
+                'assets/animation/splash.gif',
+                fit: BoxFit.contain,
+              ),
+            ),
           ),
-        ),
+          Text("By ChairPerson - Jubin Jain"),
+        ],
       ),
     );
   }
