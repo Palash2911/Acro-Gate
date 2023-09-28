@@ -1,5 +1,3 @@
-import 'dart:io';
-
 class Entry {
   String flatId;
   final String flatNo;
@@ -7,7 +5,8 @@ class Entry {
   final String status;
   final String wing;
   final String phone;
-  final String firebaseUrl;
+  String firebaseUrl;
+  final String date;
 
   Entry({
     required this.flatId,
@@ -17,5 +16,6 @@ class Entry {
     required this.wing,
     required this.phone,
     required this.firebaseUrl,
+    required this.date,
   });
 }

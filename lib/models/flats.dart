@@ -1,5 +1,3 @@
-import 'dart:io';
-
 class Flats {
   String flatId;
   final String flatNo;

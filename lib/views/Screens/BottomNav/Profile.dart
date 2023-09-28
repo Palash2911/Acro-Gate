@@ -1,9 +1,7 @@
-import 'package:acrogate/views/Screens/AdminSide.dart';
 import 'package:acrogate/views/Screens/BottomNav/Editprofile.dart';
 import 'package:acrogate/views/Screens/Onboarding/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/auth_provider.dart';
 import '../../../providers/user_provider.dart';
@@ -94,11 +92,9 @@ class _ProfileState extends State<Profile> {
             body: SingleChildScrollView(
               child: SafeArea(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const SizedBox(
-                      height: 55,
-                    ),
+                    const SizedBox(height: 100),
                     ProfileCard(),
                     Container(
                       margin: const EdgeInsets.symmetric(
@@ -107,7 +103,6 @@ class _ProfileState extends State<Profile> {
                       ),
                       child: Column(
                         children: [
-                          //Profile option
                           Card(
                             color: Colors.transparent,
                             shape: RoundedRectangleBorder(
@@ -161,36 +156,6 @@ class _ProfileState extends State<Profile> {
                           ),
                           const SizedBox(
                             height: 20,
-                          ),
-                          Card(
-                            color: Colors.transparent,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              side:
-                                  BorderSide(color: kprimaryColor, width: 2.0),
-                            ),
-                            elevation: 0.0,
-                            child: ListTile(
-                              leading: Icon(
-                                Icons.logout_rounded,
-                                size: 50.0,
-                                color: kprimaryColor,
-                              ),
-                              title: Text(
-                                'Switch to Admin',
-                                style: kTextPopM16,
-                              ),
-                              subtitle: const Text('use admin app'),
-                              trailing:
-                                  const Icon(Icons.arrow_forward_ios_rounded),
-                              onTap: () {
-                                Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                    builder: (context) => AdminSide(),
-                                  ),
-                                );
-                              },
-                            ),
                           ),
                         ],
                       ),

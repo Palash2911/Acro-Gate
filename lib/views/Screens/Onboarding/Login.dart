@@ -54,7 +54,7 @@ class _LogInState extends State<LogIn> {
           fontSize: 16.0,
         );
         Navigator.of(context)
-            .pushReplacementNamed(OtpScreen.routeName, arguments: phoneNo);
+            .pushNamed(OtpScreen.routeName, arguments: phoneNo);
       });
     } else {
       Fluttertoast.showToast(

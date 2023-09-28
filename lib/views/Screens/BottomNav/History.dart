@@ -65,6 +65,8 @@ class _HistoryState extends State<History> {
                                 DName: document['DName'],
                                 nid: document.id,
                                 status: document['Approve'],
+                                url: document['FirebaseUrl'],
+                                phone: document['PhoneNo'],
                               );
                             }).toList()
                           : [

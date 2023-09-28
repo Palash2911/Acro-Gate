@@ -92,11 +92,12 @@ class _OtpScreenState extends State<OtpScreen> {
             .then((value) {
           if (phoneNo == "+911234567890") {
             Navigator.of(ctx).pushReplacementNamed(AdminSide.routeName);
-          }
-          if (user) {
-            Navigator.of(ctx).pushReplacementNamed(UserBottomBar.routeName);
           } else {
-            Navigator.of(ctx).pushReplacementNamed(Register.routeName);
+            if (user) {
+              Navigator.of(ctx).pushReplacementNamed(UserBottomBar.routeName);
+            } else {
+              Navigator.of(ctx).pushReplacementNamed(Register.routeName);
+            }
           }
         });
       } else {
@@ -261,18 +262,6 @@ class _OtpScreenState extends State<OtpScreen> {
                                         : kprimaryColor),
                                 textAlign: TextAlign.center,
                               ),
-                            ),
-                            InkWell(
-                              child: Text(
-                                "Edit Number",
-                                style:
-                                    kTextPopB16.copyWith(color: kprimaryColor),
-                                textAlign: TextAlign.center,
-                              ),
-                              onTap: () {
-                                Navigator.of(context)
-                                    .pushReplacementNamed(LogIn.routeName);
-                              },
                             ),
                           ],
                         ),

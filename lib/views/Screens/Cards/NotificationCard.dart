@@ -10,12 +10,16 @@ class NotificationCard extends StatefulWidget {
   final String DName;
   final String nid;
   final String status;
+  final String url;
+  final String phone;
 
-  NotificationCard({
+  const NotificationCard({
     super.key,
     required this.DName,
     required this.nid,
     required this.status,
+    required this.url,
+    required this.phone,
   });
 
   @override
@@ -73,8 +77,9 @@ class _NotificationCardState extends State<NotificationCard> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 72,
+    return Container(
+      margin: const EdgeInsets.all(5),
+      height: 152,
       child: Card(
         elevation: 2.0,
         shape: RoundedRectangleBorder(
@@ -82,62 +87,86 @@ class _NotificationCardState extends State<NotificationCard> {
           side: const BorderSide(color: Colors.green, width: 2),
         ),
         color: ksecondaryColor,
-        child: ListTile(
-          title: Text(
-            widget.DName,
-            style: kTextPopB16,
-          ),
-          trailing: isLoading
-              ? const CircularProgressIndicator()
-              : accepted
-                  ? Text(
-                      widget.status,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: widget.status == 'Entry Approved'
-                            ? Colors.green
-                            : Colors.red,
-                        // You can adjust the colors based on your needs
-                        fontWeight: FontWeight.bold, // Optional: Add fontWeight
-                      ),
-                    )
-                  : Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: const Icon(
-                            Icons.check,
-                            color: Colors.green,
-                            size: 45,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            CircleAvatar(
+              radius: 50.0,
+              backgroundImage: widget.url.isNotEmpty
+                  ? Image.network(widget.url).image
+                  : const AssetImage('assets/images/logo.png'),
+            ),
+            SizedBox(
+              height: 80,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    widget.DName,
+                    style: kTextPopB14,
+                  ),
+                  const SizedBox(height: 9,),
+                  Text(
+                    "+91 ${widget.phone}",
+                    style: kTextPopB14,
+                  ),
+                  const SizedBox(height: 9,),
+              isLoading
+                  ? const CircularProgressIndicator()
+                  : accepted && widget.status != "Pending"
+                      ? Text(
+                          widget.status,
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: widget.status == 'Entry Approved'
+                                ? Colors.green
+                                : Colors.red,
+                            // You can adjust the colors based on your needs
+                            fontWeight:
+                                FontWeight.bold, // Optional: Add fontWeight
                           ),
-                          onPressed: () {
-                            applyReject("Accept");
-                            setState(() {
-                              isLoading = true;
-                            });
-                          },
+                        )
+                      : Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: const Icon(
+                                Icons.check,
+                                color: Colors.green,
+                                size: 45,
+                              ),
+                              onPressed: () {
+                                applyReject("Accept");
+                                setState(() {
+                                  isLoading = true;
+                                });
+                              },
+                            ),
+                            const SizedBox(
+                              width: 18,
+                            ),
+                            IconButton(
+                              icon: const Icon(
+                                Icons.close,
+                                color: Colors.red,
+                                size: 45,
+                              ),
+                              onPressed: () {
+                                applyReject("Reject");
+                                setState(() {
+                                  isLoading = true;
+                                });
+                              },
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                          ],
                         ),
-                        SizedBox(
-                          width: 18,
-                        ),
-                        IconButton(
-                          icon: const Icon(
-                            Icons.close,
-                            color: Colors.red,
-                            size: 45,
-                          ),
-                          onPressed: () {
-                            applyReject("Reject");
-                            setState(() {
-                              isLoading = true;
-                            });
-                          },
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                      ],
-                    ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

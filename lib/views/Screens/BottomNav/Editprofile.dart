@@ -103,6 +103,7 @@ class _EditProfileState extends State<EditProfile> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (isInit) {
+      isLoading = true;
       final List<String> arguments =
           ModalRoute.of(context)!.settings.arguments as List<String>;
       _nameController.text = arguments[1].toString();
@@ -118,6 +119,9 @@ class _EditProfileState extends State<EditProfile> {
         } else {
           wings.isSelected = false;
         }
+      });
+      setState(() {
+        isLoading = false;
       });
     }
     isInit = false;
@@ -215,11 +219,17 @@ class _EditProfileState extends State<EditProfile> {
           ),
         ),
         body: isLoading
-            ? Container(
-                alignment: Alignment.center,
-                height: double.infinity,
-                width: double.infinity,
-                child: const CircularProgressIndicator(),
+            ? Scaffold(
+                backgroundColor: ksecondaryColor,
+                body: Center(
+                  child: SizedBox(
+                    height: 350.0,
+                    child: Image.asset(
+                      'assets/animation/loading.gif',
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
               )
             : SingleChildScrollView(
                 child: Container(
@@ -239,10 +249,13 @@ class _EditProfileState extends State<EditProfile> {
                                       imageFile!,
                                       fit: BoxFit.cover,
                                     ).image
-                                  : firebaseUrl.isNotEmpty ?  Image.network(
-                                      firebaseUrl,
-                                      fit: BoxFit.cover,
-                                    ).image : const AssetImage('assets/images/logo.png'),
+                                  : firebaseUrl.isNotEmpty
+                                      ? Image.network(
+                                          firebaseUrl,
+                                          fit: BoxFit.cover,
+                                        ).image
+                                      : const AssetImage(
+                                          'assets/images/logo.png'),
                               radius: 60,
                             ),
                           ),

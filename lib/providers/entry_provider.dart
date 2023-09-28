@@ -1,14 +1,16 @@
+import 'dart:io';
+
 import 'package:acrogate/models/entries.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class EntryProvider extends ChangeNotifier {
-  Future<bool> newEntry(Entry entry) async {
+  Future<String> newEntry(Entry entry, File localUrl) async {
     try {
       CollectionReference entries =
           FirebaseFirestore.instance.collection('Entries');
-      CollectionReference user =
-          FirebaseFirestore.instance.collection('Users');
+      CollectionReference user = FirebaseFirestore.instance.collection('Users');
 
       var flatId = "";
       var entryData = {
@@ -17,6 +19,9 @@ class EntryProvider extends ChangeNotifier {
         "FID": flatId,
         "FlatNo": entry.flatNo,
         "Wing": entry.wing,
+        "FirebaseUrl": entry.firebaseUrl,
+        "PhoneNo": entry.phone,
+        "Date": entry.date,
       };
 
       final querySnapshot = await user
@@ -27,18 +32,27 @@ class EntryProvider extends ChangeNotifier {
       if (querySnapshot.docs.isNotEmpty) {
         flatId = querySnapshot.docs[0].id;
         entryData['FID'] = flatId;
-        print('Flat ID: $flatId');
+        if (localUrl != null) {
+          var storage = FirebaseStorage.instance;
+          TaskSnapshot taskSnapshot = await storage
+              .ref()
+              .child('Entries/$flatId _${DateTime.now()}')
+              .putFile(localUrl);
+          entryData['FirebaseUrl'] = await taskSnapshot.ref.getDownloadURL();
+        } else {
+          entryData['FirebaseUrl'] = "";
+        }
         var docref = await entries.add(entryData);
         var eid = docref.id;
         await user.doc(flatId).collection('Entries').doc(eid).set(entryData);
-        return true; // Document found
+        return eid; // Document found
       } else {
         print('Flat not found');
-        return false; // Document not found
+        return ''; // Document not found
       }
     } catch (e) {
       print('Error: $e');
-      return false; // Document not found (due to error)
+      return ''; // Document not found (due to error)
     }
   }
 
@@ -46,7 +60,7 @@ class EntryProvider extends ChangeNotifier {
     try {
       CollectionReference user = FirebaseFirestore.instance.collection('Users');
 
-      var flatId = "";
+      // var flatId = "";
 
       final querySnapshot = await user
           .where('FlatNo', isEqualTo: flatNo)
@@ -54,7 +68,7 @@ class EntryProvider extends ChangeNotifier {
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        var token= querySnapshot.docs[0]['FcmToken'];
+        var token = querySnapshot.docs[0]['FcmToken'];
         return token; // Document found
       } else {
         return ''; // Document not found
@@ -87,6 +101,36 @@ class EntryProvider extends ChangeNotifier {
       await user.update({
         "Approve": "Entry Denied",
       });
+    }
+  }
+
+  Future<String> getNotification(String flatNo, String wing, String eid) async {
+    try {
+      CollectionReference user = FirebaseFirestore.instance.collection('Users');
+      final querySnapshot = await user
+          .where('FlatNo', isEqualTo: flatNo)
+          .where('Wing', isEqualTo: wing)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        var token = "";
+        var res = await user
+            .doc(querySnapshot.docs[0]['UID'])
+            .collection('Entries')
+            .doc(eid)
+            .get();
+        if (res.exists) {
+          token = res['Approve'];
+          return token;
+        } else {
+          return token;
+        }
+      } else {
+        return ''; // Document not found
+      }
+    } catch (e) {
+      print('Error: $e');
+      return ''; // Document not found (due to error)
     }
   }
 }

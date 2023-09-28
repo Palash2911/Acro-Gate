@@ -1,6 +1,5 @@
 import 'package:acrogate/providers/auth_provider.dart';
 import 'package:acrogate/providers/entry_provider.dart';
-import 'package:acrogate/providers/firebasenotification.dart';
 import 'package:acrogate/providers/user_provider.dart';
 import 'package:acrogate/routes.dart';
 import 'package:acrogate/views/constants.dart';
