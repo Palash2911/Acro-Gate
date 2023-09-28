@@ -9,7 +9,6 @@ class Auth extends ChangeNotifier {
   var _profilePic = "";
   var verificationId = '';
   var _profileCreated = false;
-  var _uName = "";
   var _fcmToken = "";
 
   bool get isAuth {
@@ -18,10 +17,6 @@ class Auth extends ChangeNotifier {
 
   String get fcmToken {
     return _fcmToken;
-  }
-
-  String get uName {
-    return _uName;
   }
 
   bool get isProfile {
@@ -76,7 +71,6 @@ class Auth extends ChangeNotifier {
       prefs.setString('UID', _auth.currentUser!.uid);
       prefs.setBool('Profile', false);
       prefs.setString('ProfilePic', "");
-      prefs.setString("UserName", "");
       prefs.setString("FCMT", "");
       notifyListeners();
       return cred.user != null ? true : false;
@@ -98,7 +92,6 @@ class Auth extends ChangeNotifier {
               else
                 {
                   _profilePic = datasnapshot['ProfilePic'],
-                  _uName = datasnapshot["Name"]
                 }
             },
           );
@@ -131,7 +124,6 @@ class Auth extends ChangeNotifier {
     _token = prefs.getString('UID')!;
     _profileCreated = prefs.getBool('Profile')!;
     _profilePic = prefs.getString('ProfilePic')!;
-    _uName = prefs.getString("UserName")!;
     if (prefs.getString("FCMT") != null) {
       _fcmToken = prefs.getString("FCMT")!;
     }

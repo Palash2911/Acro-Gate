@@ -22,11 +22,9 @@ class _EditProfileState extends State<EditProfile> {
   final _flatController = TextEditingController();
   final _nameController = TextEditingController();
   final _phoneController = TextEditingController();
-  final _emailController = TextEditingController();
 
   String get name => _nameController.text;
   String get phone => _phoneController.text;
-  String get email => _emailController.text;
   String get flat => _flatController.text;
   String wing = "";
   var uid = "";
@@ -95,7 +93,6 @@ class _EditProfileState extends State<EditProfile> {
     super.initState();
     _nameController.text = "";
     _phoneController.text = "";
-    _emailController.text = "";
     _flatController.text = "";
     wings.add(Wing("A", Icons.battery_0_bar, false));
     wings.add(Wing("B", Icons.battery_3_bar, false));
@@ -109,11 +106,10 @@ class _EditProfileState extends State<EditProfile> {
       final List<String> arguments =
           ModalRoute.of(context)!.settings.arguments as List<String>;
       _nameController.text = arguments[1].toString();
-      _phoneController.text = arguments[5].toString();
-      _emailController.text = arguments[4].toString();
+      _phoneController.text = arguments[4].toString();
       selectedFlat = arguments[2].toString();
       oldflat = selectedFlat;
-      firebaseUrl = arguments[6].toString();
+      firebaseUrl = arguments[5].toString();
       wing = arguments[3].toString();
       oldwing = wing;
       wings.forEach((wings) {
@@ -131,7 +127,6 @@ class _EditProfileState extends State<EditProfile> {
   void dispose() {
     _nameController.dispose();
     _phoneController.dispose();
-    _emailController.dispose();
     _flatController.dispose();
     super.dispose();
   }
@@ -150,7 +145,6 @@ class _EditProfileState extends State<EditProfile> {
         Users(
           id: authProvider.token,
           name: name,
-          email: email,
           phone: phone,
           flatNo: selectedFlat,
           wing: wing,
@@ -245,10 +239,10 @@ class _EditProfileState extends State<EditProfile> {
                                       imageFile!,
                                       fit: BoxFit.cover,
                                     ).image
-                                  : Image.network(
+                                  : firebaseUrl.isNotEmpty ?  Image.network(
                                       firebaseUrl,
                                       fit: BoxFit.cover,
-                                    ).image,
+                                    ).image : const AssetImage('assets/images/logo.png'),
                               radius: 60,
                             ),
                           ),
@@ -340,29 +334,6 @@ class _EditProfileState extends State<EditProfile> {
                                 }
                                 return null;
                               },
-                            ),
-                            const SizedBox(height: 15.0),
-                            TextFormField(
-                              controller: _emailController,
-                              keyboardType: TextInputType.emailAddress,
-                              decoration: InputDecoration(
-                                hintText: "Email-Id",
-                                hintStyle: kTextPopR14,
-                                icon: const Icon(Icons.email_rounded),
-                                filled: true,
-                                fillColor: Colors.green.shade100,
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide.none,
-                                ),
-                              ),
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Please enter Email-Id!';
-                                }
-                                return null;
-                              },
-                              textInputAction: TextInputAction.next,
                             ),
 
                             const SizedBox(height: 15.0),

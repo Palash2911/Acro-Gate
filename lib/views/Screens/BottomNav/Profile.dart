@@ -61,7 +61,6 @@ class _ProfileState extends State<Profile> {
         value.name,
         value.flatNo,
         value.wing,
-        value.email,
         value.phone,
         value.firebaseUrl,
       ]);
@@ -71,16 +70,22 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return !dataLoaded
-        ? Container(
-            alignment: Alignment.center,
-            height: double.infinity,
-            width: double.infinity,
-            child: const CircularProgressIndicator(),
+        ? Scaffold(
+            backgroundColor: ksecondaryColor,
+            body: Center(
+              child: SizedBox(
+                height: 350.0,
+                child: Image.asset(
+                  'assets/animation/loading.gif',
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
           )
         : Scaffold(
             appBar: AppBar(
               title: const Padding(
-                padding: const EdgeInsets.fromLTRB(12.0, 2.0, 0.0, 0.0),
+                padding: EdgeInsets.fromLTRB(12.0, 2.0, 0.0, 0.0),
                 child: Text(
                   'Profile',
                 ),

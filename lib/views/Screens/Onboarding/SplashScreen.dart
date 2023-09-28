@@ -3,7 +3,7 @@ import 'package:acrogate/views/Screens/BottomNav/UserBottomNav.dart';
 import 'package:acrogate/views/Screens/Onboarding/Login.dart';
 import 'package:acrogate/views/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:acrogate/views/widgets/SizeConfig.dart';
+import 'package:acrogate/views/Screens/SizeConfig.dart';
 import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -45,10 +45,10 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Center(
         child: SizedBox(
           height: 350.0,
-          // child: Image.asset(
-          //   'assets/images/splash.gif',
-          //   fit: BoxFit.contain,
-          // ),
+          child: Image.asset(
+            'assets/animation/splash.gif',
+            fit: BoxFit.contain,
+          ),
         ),
       ),
     );

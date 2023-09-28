@@ -87,7 +87,7 @@ class _ProfileCardState extends State<ProfileCard> {
               radius: 50.0,
               backgroundImage: url.isNotEmpty
                   ? Image.network(url).image
-                  : const AssetImage('assets/images/male.png'),
+                  : const AssetImage('assets/images/logo.png'),
             ),
           ),
         ],

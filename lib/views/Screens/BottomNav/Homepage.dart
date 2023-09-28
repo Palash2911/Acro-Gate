@@ -1,7 +1,6 @@
 import 'package:acrogate/views/Screens/Cards/HomepageCard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import '../../constants.dart';
 
 class HomePage extends StatefulWidget {
@@ -52,7 +51,7 @@ class _HomePageState extends State<HomePage> {
         : Scaffold(
             appBar: AppBar(
               title: const Padding(
-                padding: const EdgeInsets.fromLTRB(12.0, 2.0, 0.0, 0.0),
+                padding: EdgeInsets.fromLTRB(12.0, 2.0, 0.0, 0.0),
                 child: Text(
                   'Acro Gate',
                 ),
@@ -62,62 +61,59 @@ class _HomePageState extends State<HomePage> {
               child: SafeArea(
                 child: Container(
                   height: MediaQuery.of(context).size.height -
-                      kBottomNavigationBarHeight,
+                      4*kBottomNavigationBarHeight,
                   padding: const EdgeInsets.only(bottom: 40, top: 20),
-                  child: RefreshIndicator(
-                    onRefresh: _getData,
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: StreamBuilder<QuerySnapshot>(
-                            stream: flatRef.snapshots(),
-                            builder: (context, snapshot) {
-                              if (!snapshot.hasData) {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: StreamBuilder<QuerySnapshot>(
+                          stream: flatRef.snapshots(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            } else {
+                              if (snapshot.data!.docs.isEmpty) {
+                                return Center(
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 300.0,
+                                        child: Image.asset(
+                                          'assets/images/noPost.png',
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 20.0),
+                                      Text(
+                                        "No Flats Listed Yet !",
+                                        style: kTextPopM16,
+                                      ),
+                                    ],
+                                  ),
                                 );
                               } else {
-                                if (snapshot.data!.docs.isEmpty) {
-                                  return Center(
-                                    child: Column(
-                                      children: [
-                                        SizedBox(
-                                          height: 300.0,
-                                          child: Image.asset(
-                                            'assets/images/noPost.png',
-                                            fit: BoxFit.contain,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 20.0),
-                                        Text(
-                                          "No Flats Listed Yet !",
-                                          style: kTextPopM16,
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                } else {
-                                  return ListView(
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    children:
-                                        snapshot.data!.docs.map((document) {
-                                      return HomePageCard(
-                                        name: document['Name'],
-                                        flatNo: document['FlatNo'],
-                                        wing: document['Wing'],
-                                        imageUrl: '',
-                                        number: document['PhoneNo'],
-                                      );
-                                    }).toList(),
-                                  );
-                                }
+                                return ListView(
+                                  scrollDirection: Axis.vertical,
+                                  shrinkWrap: true,
+                                  children:
+                                      snapshot.data!.docs.map((document) {
+                                    return HomePageCard(
+                                      name: document['Name'],
+                                      flatNo: document['FlatNo'],
+                                      wing: document['Wing'],
+                                      imageUrl: '',
+                                      number: document['PhoneNo'],
+                                    );
+                                  }).toList(),
+                                );
                               }
-                            },
-                          ),
+                            }
+                          },
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),

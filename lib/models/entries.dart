@@ -6,6 +6,8 @@ class Entry {
   final String dname;
   final String status;
   final String wing;
+  final String phone;
+  final String firebaseUrl;
 
   Entry({
     required this.flatId,
@@ -13,5 +15,7 @@ class Entry {
     required this.dname,
     required this.status,
     required this.wing,
+    required this.phone,
+    required this.firebaseUrl,
   });
 }

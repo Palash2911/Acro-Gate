@@ -110,6 +110,8 @@ class _AdminCardState extends State<AdminCard> {
           status: "Pending",
           flatNo: selectedFlat,
           wing: wing,
+          phone: '',
+          firebaseUrl: '',
         ),
       )
           .catchError((e) {

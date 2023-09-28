@@ -66,93 +66,96 @@ class _LogInState extends State<LogIn> {
         fontSize: 16.0,
       );
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // body: isLoading
-      //     ? Center(
-      //         child: SizedBox(
-      //           height: 200.0,
-      //           // child: Image.asset(
-      //           //   'assets/images/loading.gif',
-      //           //   fit: BoxFit.contain,
-      //           // ),
-      //         ),
-      //       )
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 35.0, vertical: 45.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                const SizedBox(height: 20),
-                SizedBox(
-                  height: 280.0,
-                  // child: Lottie.asset('assets/animation/animation5.json'),
+      body: isLoading
+          ? Center(
+              child: SizedBox(
+                height: 200.0,
+                child: Image.asset(
+                  'assets/animation/loading.gif',
+                  fit: BoxFit.contain,
                 ),
-                const Center(
-                  child: Text(
-                    "Let's Unite",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                      fontSize: 25,
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const SizedBox(height: 5),
-                Form(
-                  key: _form,
-                  child: IntlPhoneField(
-                    controller: _phoneController,
-                    decoration: InputDecoration(
-                      labelText: 'Phone Number',
-                      counterText: "",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15.0),
+              ),
+            )
+          : SingleChildScrollView(
+              child: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 35.0, vertical: 45.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      const SizedBox(height: 20),
+                      SizedBox(
+                        height: 280.0,
+                        child: Lottie.asset('assets/animation/animation5.json'),
                       ),
-                    ),
-                    validator: (value) {
-                      if (value!.number.isEmpty) {
-                        return 'Please Enter Valid Number!';
-                      }
-                      return null;
-                    },
-                    initialCountryCode: 'IN',
-                    onChanged: (phone) {
-                      setState(() {
-                        phoneNo = phone.completeNumber.toString();
-                      });
-                    },
+                      const Center(
+                        child: Text(
+                          "Let's Unite",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                            fontSize: 25,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      const SizedBox(height: 5),
+                      Form(
+                        key: _form,
+                        child: IntlPhoneField(
+                          controller: _phoneController,
+                          decoration: InputDecoration(
+                            labelText: 'Phone Number',
+                            counterText: "",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value!.number.isEmpty) {
+                              return 'Please Enter Valid Number!';
+                            }
+                            return null;
+                          },
+                          initialCountryCode: 'IN',
+                          onChanged: (phone) {
+                            setState(() {
+                              phoneNo = phone.completeNumber.toString();
+                            });
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () => _sendOtp(context),
+                        style: ElevatedButton.styleFrom(
+                            fixedSize: const Size(300, 50),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            backgroundColor: kprimaryColor,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
+                            textStyle: const TextStyle(
+                              fontSize: 18,
+                            )),
+                        child: const Text('Generate OTP'),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () => _sendOtp(context),
-                  style: ElevatedButton.styleFrom(
-                      fixedSize: const Size(300, 50),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      backgroundColor: kprimaryColor,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      textStyle: const TextStyle(
-                        fontSize: 18,
-                      )),
-                  child: const Text('Generate OTP'),
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 }

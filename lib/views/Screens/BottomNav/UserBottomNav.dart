@@ -30,85 +30,41 @@ class _UserBottomBarState extends State<UserBottomBar> {
         controller: _controller,
         screens: _buildScreens(),
         items: _navBarsItems(),
-        navBarStyle: NavBarStyle.style9,
+        navBarStyle: NavBarStyle.style1,
       ),
     );
   }
 }
 
 List<Widget> _buildScreens() {
-  return [HomePage(), const History(), const Profile()];
+  return [const HomePage(), const History(), const Profile()];
 }
 
 List<PersistentBottomNavBarItem> _navBarsItems() {
   return [
     PersistentBottomNavBarItem(
-        icon: Icon(FeatherIcons.home),
-        title: ("Home"),
-        activeColorPrimary: kprimaryColor,
-        inactiveColorPrimary: kprimaryColor),
-    PersistentBottomNavBarItem(
-      icon: Icon(Icons.doorbell_outlined),
-      title: ("Notifications"),
+      icon: const Icon(FeatherIcons.home),
+      title: ("Home"),
       activeColorPrimary: kprimaryColor,
+      textStyle: const TextStyle(
+        fontWeight: FontWeight.bold,
+      ),
     ),
     PersistentBottomNavBarItem(
-        icon: Icon(Icons.person_4_outlined),
-        title: ("Profile"),
-        activeColorPrimary: kprimaryColor,
-        inactiveColorPrimary: kprimaryColor),
+      icon: const Icon(Icons.doorbell_outlined),
+      title: ("Entries"),
+      activeColorPrimary: kprimaryColor,
+      textStyle: const TextStyle(
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    PersistentBottomNavBarItem(
+      icon: const Icon(Icons.person_4_outlined),
+      title: ("Profile"),
+      activeColorPrimary: kprimaryColor,
+      textStyle: const TextStyle(
+        fontWeight: FontWeight.bold,
+      ),
+    ),
   ];
 }
-
-// class UserBottomBar extends StatefulWidget {
-//   const UserBottomBar({super.key});
-
-//   @override
-//   State<UserBottomBar> createState() => _UserBottomBarState();
-// }
-
-// class _UserBottomBarState extends State<UserBottomBar> {
-//   final PersistentTabController _controller =
-//       PersistentTabController(initialIndex: 0);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: PersistentTabView(
-//         context,
-//         controller: _controller,
-//         screens: _buildScreens(),
-//         items: _navBarsItems(),
-//         navBarStyle: NavBarStyle.style10,
-//         backgroundColor: kprimaryColor,
-//       ),
-//     );
-//   }
-// }
-
-// List<Widget> _buildScreens() {
-//   return [HomeScreen(), ChatScreen(), ActivityScreen()];
-// }
-
-// List<PersistentBottomNavBarItem> _navBarsItems() {
-//   return [
-//     PersistentBottomNavBarItem(
-//       icon: Icon(
-//         FeatherIcons.home,
-//       ),
-//       title: ("Home"),
-//       textStyle: kTextPopR12,
-//       activeColorPrimary: ksecondaryColor,
-//     ),
-//     PersistentBottomNavBarItem(
-//       icon: Icon(FeatherIcons.messageSquare),
-//       title: ("Chat"),
-//       activeColorPrimary: ksecondaryColor,
-//     ),
-//     PersistentBottomNavBarItem(
-//         icon: Icon(FeatherIcons.activity),
-//         title: ("Activity"),
-//         activeColorPrimary: ksecondaryColor,
-//         inactiveColorPrimary: ksecondaryColor),
-//   ];
-// }

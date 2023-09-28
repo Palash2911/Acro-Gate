@@ -11,35 +11,41 @@ class UserProvider extends ChangeNotifier {
   Future registerUser(Users user) async {
     final prefs = await SharedPreferences.getInstance();
     try {
-      var storage = FirebaseStorage.instance;
-      TaskSnapshot taskSnapshot = await storage
-          .ref()
-          .child('Profile/${user.id}')
-          .putFile(user.localUrl!);
-      user.firebaseUrl = await taskSnapshot.ref.getDownloadURL();
+      if (user.localUrl != null) {
+        var storage = FirebaseStorage.instance;
+        TaskSnapshot taskSnapshot = await storage
+            .ref()
+            .child('Profile/${user.id}')
+            .putFile(user.localUrl!);
+        user.firebaseUrl = await taskSnapshot.ref.getDownloadURL();
+      } else {
+        user.firebaseUrl = "";
+      }
       CollectionReference users =
           FirebaseFirestore.instance.collection('Users');
       await users.doc(user.id).set({
         "Name": user.name,
         "PhoneNo": user.phone,
         "UID": user.id,
-        "Email": user.email,
         "FlatNo": user.flatNo,
-        "Wing" : user.wing,
+        "Wing": user.wing,
         "ProfilePic": user.firebaseUrl,
       });
 
       prefs.setBool('Profile', true);
       prefs.setString('ProfilePic', user.firebaseUrl);
-      prefs.setString("UserName", user.name);
 
-      await registerFlat(Flats(flatId: "", flatNo: user.flatNo, oname: user.name, phone: user.phone, wing: user.wing));
+      await registerFlat(Flats(
+          flatId: "",
+          flatNo: user.flatNo,
+          oname: user.name,
+          phone: user.phone,
+          wing: user.wing));
 
       notifyListeners();
     } catch (e) {
       prefs.setBool('Profile', false);
       prefs.setString('ProfilePic', "");
-      prefs.setString("UserName", "");
       notifyListeners();
       rethrow;
     }
@@ -49,10 +55,9 @@ class UserProvider extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
 
     try {
-      CollectionReference users = FirebaseFirestore.instance.collection('Users');
-      await users.doc(uid).update({
-        "FcmToken": token
-      });
+      CollectionReference users =
+          FirebaseFirestore.instance.collection('Users');
+      await users.doc(uid).update({"FcmToken": token});
       prefs.setString("FCMT", token);
       notifyListeners();
     } catch (e) {
@@ -75,7 +80,7 @@ class UserProvider extends ChangeNotifier {
 
       var docRef = await flat.add(flatData);
       flats.flatId = docRef.id;
-      await docRef.update({ "FID": docRef.id });
+      await docRef.update({"FID": docRef.id});
 
       notifyListeners();
     } catch (e) {
@@ -115,7 +120,7 @@ class UserProvider extends ChangeNotifier {
   Future<Users?> getUserDetails(String uid) async {
     try {
       CollectionReference users =
-      FirebaseFirestore.instance.collection('Users');
+          FirebaseFirestore.instance.collection('Users');
       Users? user;
       if (uid.isNotEmpty) {
         uid = uid;
@@ -126,7 +131,6 @@ class UserProvider extends ChangeNotifier {
           id: data["UID"],
           flatNo: data["FlatNo"],
           name: data["Name"],
-          email: data["Email"],
           phone: data["PhoneNo"],
           wing: data["Wing"],
           localUrl: null,
@@ -141,7 +145,7 @@ class UserProvider extends ChangeNotifier {
   }
 
   Future updateUser(Users user, String oldFlatno, String oldWing) async {
-      final prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
     try {
       if (user.localUrl != null) {
         var storage = FirebaseStorage.instance;
@@ -157,14 +161,21 @@ class UserProvider extends ChangeNotifier {
         "Name": user.name,
         "PhoneNo": user.phone,
         "UID": user.id,
-        "Email": user.email,
         "FlatNo": user.flatNo,
-        "Wing" : user.wing,
+        "Wing": user.wing,
         "ProfilePic": user.firebaseUrl,
       });
       prefs.setString('ProfilePic', user.firebaseUrl);
       prefs.setString("UserName", user.name);
-      updateFlat(Flats(flatId: "", flatNo: user.flatNo, oname: user.name, phone: user.phone, wing: user.wing), oldFlatno, oldWing);
+      updateFlat(
+          Flats(
+              flatId: "",
+              flatNo: user.flatNo,
+              oname: user.name,
+              phone: user.phone,
+              wing: user.wing),
+          oldFlatno,
+          oldWing);
       notifyListeners();
     } catch (e) {
       rethrow;

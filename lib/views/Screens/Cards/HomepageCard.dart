@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -27,7 +28,7 @@ class HomePageCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      padding: const EdgeInsets.all(12.0),
+      padding: const EdgeInsets.all(11.0),
       decoration: BoxDecoration(
         border: Border.all(color: kprimaryColor, width: 2.0),
         borderRadius: BorderRadius.circular(8.0),
@@ -46,28 +47,33 @@ class HomePageCard extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 9,),
           SizedBox(
-            width: MediaQuery.of(context).size.width * 0.60,
+            width: MediaQuery.of(context).size.width * 0.67,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  name,
-                  style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-                  overflow: TextOverflow.ellipsis,
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: AutoSizeText(
+                      name,
+                      style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'Flat No: $flatNo',
-                      style: TextStyle(fontSize: 14.0),
+                      style: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500),
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
                       'Wing: $wing-Wing',
-                      style: TextStyle(fontSize: 14.0),
+                      style: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],
