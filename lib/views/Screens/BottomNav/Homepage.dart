@@ -29,18 +29,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _getData() async {
-    // var authToken = Provider.of<Auth>(context, listen: false).token;
-    // await Provider.of<UserProvider>(context, listen: false)
-    //     .getUserDetails(authToken)
-    //     .then((value) {
-    //   setState(() {
-    //     name = value!.name;
-    //     uid = value.id;
-    //     flatNo = value.flatNo;
-    //     wing = value.wing;
-    //     url = value.firebaseUrl;
-    //   });
-    // });
     setState(() {
       dataLoaded = false;
     });

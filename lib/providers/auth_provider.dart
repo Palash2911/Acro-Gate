@@ -6,7 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Auth extends ChangeNotifier {
   var _token = "";
   final _auth = FirebaseAuth.instance;
-  var _profilePic = "";
   var verificationId = '';
   var _profileCreated = false;
   var _fcmToken = "";
@@ -21,10 +20,6 @@ class Auth extends ChangeNotifier {
 
   bool get isProfile {
     return _profileCreated;
-  }
-
-  String get profilePic {
-    return _profilePic;
   }
 
   String get token {
@@ -70,7 +65,6 @@ class Auth extends ChangeNotifier {
       _token = _auth.currentUser!.uid;
       prefs.setString('UID', _auth.currentUser!.uid);
       prefs.setBool('Profile', false);
-      prefs.setString('ProfilePic', "");
       prefs.setString("FCMT", "");
       notifyListeners();
       return cred.user != null ? true : false;
@@ -89,10 +83,6 @@ class Auth extends ChangeNotifier {
             (datasnapshot) => {
               if (!datasnapshot.exists)
                 {user = false}
-              else
-                {
-                  _profilePic = datasnapshot['ProfilePic'],
-                }
             },
           );
       if (!user) {
@@ -123,7 +113,6 @@ class Auth extends ChangeNotifier {
     }
     _token = prefs.getString('UID')!;
     _profileCreated = prefs.getBool('Profile')!;
-    _profilePic = prefs.getString('ProfilePic')!;
     if (prefs.getString("FCMT") != null) {
       _fcmToken = prefs.getString("FCMT")!;
     }
