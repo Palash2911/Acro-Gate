@@ -79,7 +79,7 @@ class _NotificationCardState extends State<NotificationCard> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(5),
-      height: 152,
+      height: 162,
       child: Card(
         elevation: 2.0,
         shape: RoundedRectangleBorder(
@@ -97,72 +97,78 @@ class _NotificationCardState extends State<NotificationCard> {
                   : const AssetImage('assets/images/logo.png'),
             ),
             SizedBox(
-              height: 80,
+              height: 100,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
                     widget.DName,
                     style: kTextPopB14,
                   ),
-                  const SizedBox(height: 9,),
+                  const SizedBox(
+                    height: 7,
+                  ),
                   Text(
                     "+91 ${widget.phone}",
                     style: kTextPopB14,
                   ),
-                  const SizedBox(height: 9,),
-              isLoading
-                  ? const CircularProgressIndicator()
-                  : accepted && widget.status != "Pending"
-                      ? Text(
-                          widget.status,
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: widget.status == 'Entry Approved'
-                                ? Colors.green
-                                : Colors.red,
-                            // You can adjust the colors based on your needs
-                            fontWeight:
-                                FontWeight.bold, // Optional: Add fontWeight
-                          ),
+                  accepted && widget.status != "Pending"
+                      ? const SizedBox(
+                          height: 7,
                         )
-                      : Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: const Icon(
-                                Icons.check,
-                                color: Colors.green,
-                                size: 45,
-                              ),
-                              onPressed: () {
-                                applyReject("Accept");
-                                setState(() {
-                                  isLoading = true;
-                                });
-                              },
-                            ),
-                            const SizedBox(
-                              width: 18,
-                            ),
-                            IconButton(
-                              icon: const Icon(
-                                Icons.close,
-                                color: Colors.red,
-                                size: 45,
-                              ),
-                              onPressed: () {
-                                applyReject("Reject");
-                                setState(() {
-                                  isLoading = true;
-                                });
-                              },
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                          ],
+                      : SizedBox(
+                          height: 1,
                         ),
+                  isLoading
+                      ? const CircularProgressIndicator()
+                      : accepted && widget.status != "Pending"
+                          ? Text(
+                              widget.status,
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: widget.status == 'Entry Approved'
+                                    ? Colors.green
+                                    : Colors.red,
+                                // You can adjust the colors based on your needs
+                                fontWeight:
+                                    FontWeight.bold, // Optional: Add fontWeight
+                              ),
+                            )
+                          : Row(
+                              children: [
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.check,
+                                    color: Colors.green,
+                                    size: 45,
+                                  ),
+                                  onPressed: () {
+                                    applyReject("Accept");
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+                                  },
+                                ),
+                                const SizedBox(
+                                  width: 18,
+                                ),
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.close,
+                                    color: Colors.red,
+                                    size: 45,
+                                  ),
+                                  onPressed: () {
+                                    applyReject("Reject");
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+                                  },
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                              ],
+                            ),
                 ],
               ),
             ),

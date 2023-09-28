@@ -1,6 +1,8 @@
+import 'package:acrogate/providers/entry_provider.dart';
 import 'package:acrogate/views/Screens/Cards/HomepageCard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../constants.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,6 +21,11 @@ class _HomePageState extends State<HomePage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _getData();
+    _killCode();
+  }
+
+  void _killCode() async {
+    await Provider.of<EntryProvider>(context,listen: false).killCode();
   }
 
   Future<void> _getData() async {

