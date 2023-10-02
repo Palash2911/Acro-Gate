@@ -115,7 +115,7 @@ class _NotificationCardState extends State<NotificationCard> {
                       ? const SizedBox(
                           height: 7,
                         )
-                      : SizedBox(
+                      : const SizedBox(
                           height: 1,
                         ),
                   isLoading

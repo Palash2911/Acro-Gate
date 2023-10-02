@@ -87,19 +87,20 @@ class _OtpScreenState extends State<OtpScreen> {
       if (isValid) {
         var user = await authProvider.checkUser();
         var fcmT = await FirebaseNotification().getToken();
-        await Provider.of<UserProvider>(context, listen: false)
-            .updateToken(fcmT.toString(), authProvider.token)
-            .then((value) {
-          if (phoneNo == "+911234567890") {
-            Navigator.of(ctx).pushReplacementNamed(AdminSide.routeName);
+        if (phoneNo == "+911234567890") {
+          Navigator.of(ctx).pushReplacementNamed(AdminSide.routeName);
+        } else {
+          if (user) {
+            await Provider.of<UserProvider>(context, listen: false)
+                .updateToken(fcmT.toString(), authProvider.token)
+                .then((value) {
+                  const initin = 0;
+              Navigator.of(ctx).pushReplacementNamed(UserBottomBar.routeName, arguments: initin);
+            });
           } else {
-            if (user) {
-              Navigator.of(ctx).pushReplacementNamed(UserBottomBar.routeName);
-            } else {
-              Navigator.of(ctx).pushReplacementNamed(Register.routeName);
-            }
+            Navigator.of(ctx).pushReplacementNamed(Register.routeName);
           }
-        });
+        }
       } else {
         setState(() {
           isLoading = false;

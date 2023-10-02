@@ -17,8 +17,15 @@ class UserBottomBar extends StatefulWidget {
 }
 
 class _UserBottomBarState extends State<UserBottomBar> {
-  final PersistentTabController _controller =
+  late PersistentTabController _controller =
       PersistentTabController(initialIndex: 0);
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final initialIndex = ModalRoute.of(context)!.settings.arguments as int;
+    _controller = PersistentTabController(initialIndex: initialIndex);
+  }
 
   @override
   Widget build(BuildContext context) {

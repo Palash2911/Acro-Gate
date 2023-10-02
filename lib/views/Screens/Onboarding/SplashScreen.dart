@@ -28,17 +28,18 @@ class _SplashScreenState extends State<SplashScreen> {
     var authProvider = Provider.of<Auth>(context, listen: false);
 
     Future.delayed(const Duration(seconds: 2), () async {
-      // await authProvider.autoLogin().then((_) async {
-      //   if (authProvider.token == "6RSj6M3qYAYLXkICEOYvNsIkAgE2") {
-      //     Navigator.of(ctx).pushReplacementNamed(AdminSide.routeName);
-      //   } else {
-      //     if (authProvider.isAuth) {
-      //       Navigator.of(ctx).pushReplacementNamed(UserBottomBar.routeName);
-      //     } else {
-      //       Navigator.of(ctx).pushReplacementNamed(LogIn.routeName);
-      //     }
-      //   }
-      // });
+      await authProvider.autoLogin().then((_) async {
+        if (authProvider.token == "6RSj6M3qYAYLXkICEOYvNsIkAgE2") {
+          Navigator.of(ctx).pushReplacementNamed(AdminSide.routeName);
+        } else {
+          if (authProvider.isAuth) {
+            const initin = 1;
+            Navigator.of(ctx).pushReplacementNamed(UserBottomBar.routeName, arguments: initin);
+          } else {
+            Navigator.of(ctx).pushReplacementNamed(LogIn.routeName);
+          }
+        }
+      });
     });
   }
 
@@ -60,7 +61,7 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
             ),
           ),
-          Text("By ChairPerson - Jubin Jain"),
+          Text("By ChairPerson - Jubin Jain", style: kTextPopB14),
         ],
       ),
     );

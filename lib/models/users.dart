@@ -8,6 +8,8 @@ class Users {
   final String wing;
   final File? localUrl;
   String firebaseUrl;
+  final List<String> maidNames;
+  final List<String> maidNumbers;
 
   Users({
     required this.id,
@@ -17,5 +19,7 @@ class Users {
     required this.wing,
     required this.localUrl,
     required this.firebaseUrl,
+    required this.maidNames,
+    required this.maidNumbers,
   });
 }

@@ -81,8 +81,7 @@ class Auth extends ChangeNotifier {
           FirebaseFirestore.instance.collection('Users');
       await users.doc(_auth.currentUser?.uid).get().then(
             (datasnapshot) => {
-              if (!datasnapshot.exists)
-                {user = false}
+              if (!datasnapshot.exists) {user = false}
             },
           );
       if (!user) {
@@ -97,12 +96,16 @@ class Auth extends ChangeNotifier {
   }
 
   Future<void> signOut() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.clear().then((value) async {
-      if (value) {
-        await _auth.signOut();
-      }
-    });
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.clear().then((value) async {
+        if (value) {
+          await _auth.signOut();
+        }
+      });
+    } catch (e) {
+      print(e);
+    }
     notifyListeners();
   }
 

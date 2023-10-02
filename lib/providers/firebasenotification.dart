@@ -35,8 +35,6 @@ class FirebaseNotification {
     if (mssg == null) {
       return;
     }
-
-    navigatorKey.currentState!.pushReplacementNamed(UserBottomBar.routeName);
   }
 
   void onTokenRefresh() async {
@@ -70,7 +68,6 @@ class FirebaseNotification {
   }
 
   void displayLocalNotification(RemoteNotification notification) {
-    print("This Android Name ${androidChannel.name}");
     _localNotification.show(
       notification.hashCode,
       notification.title,

@@ -36,7 +36,7 @@ class _HistoryState extends State<History> {
         title: const Padding(
           padding: EdgeInsets.fromLTRB(12.0, 2.0, 0.0, 0.0),
           child: Text(
-            'Notifications',
+            'Entries',
           ),
         ),
       ),
@@ -81,7 +81,7 @@ class _HistoryState extends State<History> {
                                   ),
                                   const SizedBox(height: 20.0),
                                   Text(
-                                    "No Notifications Yet !",
+                                    "No Entries Yet !",
                                     style: kTextPopM16,
                                   ),
                                 ],

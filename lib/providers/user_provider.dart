@@ -5,10 +5,12 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/flats.dart';
+import 'firebasenotification.dart';
 
 class UserProvider extends ChangeNotifier {
   Future registerUser(Users user) async {
     final prefs = await SharedPreferences.getInstance();
+    var fcmT = await FirebaseNotification().getToken();
     try {
       if (user.localUrl != null) {
         var storage = FirebaseStorage.instance;
@@ -29,6 +31,9 @@ class UserProvider extends ChangeNotifier {
         "FlatNo": user.flatNo,
         "Wing": user.wing,
         "ProfilePic": user.firebaseUrl,
+        "FcmToken": fcmT,
+        "MaidNumbers": user.maidNumbers,
+        "MaidNames": user.maidNames,
       });
 
       prefs.setBool('Profile', true);
@@ -134,6 +139,8 @@ class UserProvider extends ChangeNotifier {
           wing: data["Wing"],
           localUrl: null,
           firebaseUrl: data['ProfilePic'],
+          maidNumbers: data['MaidNumbers'],
+          maidNames: data['MaidNames']
         );
       });
       notifyListeners();

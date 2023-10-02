@@ -154,6 +154,8 @@ class _EditProfileState extends State<EditProfile> {
           wing: wing,
           localUrl: imageFile,
           firebaseUrl: firebaseUrl,
+          maidNames: [],
+          maidNumbers: [],
         ),
         oldflat,
         oldwing,
@@ -182,7 +184,8 @@ class _EditProfileState extends State<EditProfile> {
           setState(() {
             isLoading = false;
           });
-          Navigator.of(ctx).pushReplacementNamed(UserBottomBar.routeName);
+          const initin = 2;
+          Navigator.of(ctx).pushReplacementNamed(UserBottomBar.routeName, arguments: initin);
         });
       });
     } else {
