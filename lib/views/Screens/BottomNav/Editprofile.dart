@@ -135,7 +135,7 @@ class _EditProfileState extends State<EditProfile> {
           wings.isSelected = false;
         }
       });
-      if (maidNames.length > 0) {
+      if (maidNames.isNotEmpty) {
         maidEntry = "Yes";
         maidApprove[0].isSelected = true;
         maidApprove[1].isSelected = false;
@@ -692,7 +692,7 @@ class _EditProfileState extends State<EditProfile> {
                                               },
                                               child: const Text("Remove Maid"),
                                             )
-                                          : SizedBox(
+                                          : const SizedBox(
                                               width: 1,
                                             ),
                                       ElevatedButton(
