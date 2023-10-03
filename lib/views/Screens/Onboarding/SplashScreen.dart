@@ -33,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
           Navigator.of(ctx).pushReplacementNamed(AdminSide.routeName);
         } else {
           if (authProvider.isAuth) {
-            const initin = 1;
+            const initin = 0;
             Navigator.of(ctx).pushReplacementNamed(UserBottomBar.routeName, arguments: initin);
           } else {
             Navigator.of(ctx).pushReplacementNamed(LogIn.routeName);

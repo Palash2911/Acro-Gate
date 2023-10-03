@@ -6,6 +6,7 @@ import 'package:acrogate/providers/firebasenotification.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../constants.dart';
 import 'package:http/http.dart' as http;
@@ -45,42 +46,46 @@ class _AdminCardState extends State<AdminCard> {
 
   List<String> flats = [
     "Select Flat No",
+    "101",
+    "102",
+    "103",
+    "104",
+    "201",
+    "202",
+    "203",
+    "204",
+    "301",
+    "302",
+    "303",
+    "304",
+    "401",
+    "402",
+    "403",
+    "404",
+    "501",
+    "502",
+    "503",
+    "504",
+    "601",
+    "602",
+    "603",
+    "604",
+    "701",
+    "702",
+    "703",
+    "704",
+    "801",
+    "802",
+    "803",
+    "804",
+    "901",
+    "902",
+    "903",
+    "904",
     "1001",
     "1002",
     "1003",
     "1004",
-    "2001",
-    "2002",
-    "2003",
-    "2004",
-    "3001",
-    "3002",
-    "3003",
-    "3004",
-    "4001",
-    "4002",
-    "4003",
-    "4004",
-    "5001",
-    "5002",
-    "5003",
-    "5004",
-    "6001",
-    "6002",
-    "6003",
-    "6004",
-    "7001",
-    "7002",
-    "7003",
-    "7004",
-    "8001",
-    "8002",
-    "8003",
-    "8004",
-    "9001",
-    "9002",
-    "9003",
-    "9004",
     "1101",
     "1102",
     "1103",
@@ -119,6 +124,13 @@ class _AdminCardState extends State<AdminCard> {
     firebaseNoti.onTokenRefresh();
   }
 
+  void _closeEntry(BuildContext context) {
+    getStatus('');
+    setState(() {
+      isLoading = false;
+    });
+  }
+
   Future _createEntry(BuildContext ctx) async {
     var entryProvider = Provider.of<EntryProvider>(ctx, listen: false);
     final isValid = _form.currentState!.validate();
@@ -138,7 +150,8 @@ class _AdminCardState extends State<AdminCard> {
           wing: wing,
           phone: phone,
           firebaseUrl: '',
-          date: DateTime.now().toString(),
+          date: DateFormat('dd-MM-yy').format(DateTime.now()).toString(),
+          time: DateFormat('HH:mm:ss').format(DateTime.now()).toString(),
         ),
         _image!,
       )
@@ -156,36 +169,40 @@ class _AdminCardState extends State<AdminCard> {
         );
       }).then((String res) async {
         if (res.isNotEmpty) {
-          entryProvider.getToken(selectedFlat, wing).then((String fcmt) async {
+          entryProvider
+              .getToken(selectedFlat, wing)
+              .then((List<String> fcmt) async {
             if (fcmt.isNotEmpty) {
-              var data = {
-                'to': fcmt,
-                'notification': {
-                  'title': 'Some One At Door 🚪',
-                  'body': 'Please Approve Entry !!',
-                }
-              };
-              try {
-                final response = await http.post(
-                  Uri.parse("https://fcm.googleapis.com/fcm/send"),
-                  body: jsonEncode(data),
-                  headers: {
-                    'Content-Type': 'application/json; charset=UTF-8',
-                    'Authorization':
-                        'key=AAAAOSftUfs:APA91bGK8JoiHH2WsJHz4HZA8PgWq_Ai7TcKCmhq-mbDTzV0wkUrVCFSewOnxlQ4H5uYzdl6PuNoMVhaZhTLzu3uzSZ6WYS_UhfwEEIEQFwhUp6JZWUDGzmKCKEUQUUhYq5F98k8Up_I', // Replace with your server key
-                  },
-                );
+              for (int i = 0; i < fcmt.length; i++) {
+                var data = {
+                  'to': fcmt[i],
+                  'notification': {
+                    'title': 'Some One At Door 🚪',
+                    'body': 'Please Approve Entry !!',
+                  }
+                };
+                try {
+                  final response = await http.post(
+                    Uri.parse("https://fcm.googleapis.com/fcm/send"),
+                    body: jsonEncode(data),
+                    headers: {
+                      'Content-Type': 'application/json; charset=UTF-8',
+                      'Authorization':
+                          'key=AAAAOSftUfs:APA91bGK8JoiHH2WsJHz4HZA8PgWq_Ai7TcKCmhq-mbDTzV0wkUrVCFSewOnxlQ4H5uYzdl6PuNoMVhaZhTLzu3uzSZ6WYS_UhfwEEIEQFwhUp6JZWUDGzmKCKEUQUUhYq5F98k8Up_I', // Replace with your server key
+                    },
+                  );
 
-                if (response.statusCode == 200) {
-                  print(response.body);
-                } else {
-                  print(response.body);
+                  if (response.statusCode == 200) {
+                    print(response.body);
+                  } else {
+                    print(response.body);
+                  }
+                } catch (e) {
+                  setState(() {
+                    isLoading = false;
+                  });
+                  print("Error sending notification: $e");
                 }
-              } catch (e) {
-                setState(() {
-                  isLoading = false;
-                });
-                print("Error sending notification: $e");
               }
             }
           }).catchError((e) {
@@ -223,18 +240,24 @@ class _AdminCardState extends State<AdminCard> {
   }
 
   void getStatus(String eid) {
-    Future.delayed(const Duration(seconds: 4), () async {
-      var entryProvider = Provider.of<EntryProvider>(context, listen: false);
-      entryProvider
-          .getNotification(selectedFlat, wing, eid)
-          .then((String value) {
-        if (value.isEmpty || value == "Pending") {
-          getStatus(eid);
-        } else {
-          reset(value);
-        }
+    if(eid == "")
+      {
+        reset("Entry Approved");
+      }
+    else {
+      Future.delayed(const Duration(seconds: 4), () async {
+        var entryProvider = Provider.of<EntryProvider>(context, listen: false);
+        entryProvider
+            .getNotification(selectedFlat, wing, eid)
+            .then((String value) {
+          if (value.isEmpty || value == "Pending") {
+            getStatus(eid);
+          } else {
+            reset(value);
+          }
+        });
       });
-    });
+    }
   }
 
   void reset(String val) {
@@ -244,7 +267,7 @@ class _AdminCardState extends State<AdminCard> {
       _modalState = ModalState.Deny;
     }
     setState(() {
-        isLoading=false;
+      isLoading = false;
       _nameController.text = "";
       _phoneController.text = "";
       _image = null;
@@ -258,7 +281,34 @@ class _AdminCardState extends State<AdminCard> {
   @override
   Widget build(BuildContext context) {
     return isLoading
-        ? const CircularProgressIndicator()
+        ? Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const CircularProgressIndicator(),
+            const SizedBox(height: 100),
+            SizedBox(
+              height: 40, //height of button
+              width: 200, //width of button
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary:
+                  Colors.red, //background color of button
+                  shape: RoundedRectangleBorder(
+                    //to set border radius to button
+                      borderRadius: BorderRadius.circular(10)),
+                  //content padding inside button
+                ),
+                onPressed: () {
+                  _closeEntry(context);
+                },
+                child: const Text(
+                  "Cancel Request",
+                  style: TextStyle(fontSize: 15),
+                ),
+              ),
+            )
+          ],
+        )
         : Container(
             margin:
                 const EdgeInsets.symmetric(horizontal: 32.0, vertical: 15.0),
@@ -327,6 +377,7 @@ class _AdminCardState extends State<AdminCard> {
                             decoration: InputDecoration(
                               hintText: "Phone Number",
                               hintStyle: kTextPopR14,
+                              counterText: '',
                               icon: const Icon(Icons.phone),
                               filled: true,
                               fillColor: Colors.green.shade100,
@@ -338,10 +389,13 @@ class _AdminCardState extends State<AdminCard> {
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return 'Please Enter Phone No.!';
+                              } else if (value.length != 10) {
+                                return 'Phone Number must be 10 digits long.';
                               }
                               return null;
                             },
                             textInputAction: TextInputAction.next,
+                            maxLength: 10,
                           ),
                           const SizedBox(height: 12.0),
                           Row(
@@ -547,7 +601,7 @@ class _AdminCardState extends State<AdminCard> {
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               primary:
-                                  kprimaryColor, //background color of button
+                              kprimaryColor, //background color of button
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10)),
                             ),

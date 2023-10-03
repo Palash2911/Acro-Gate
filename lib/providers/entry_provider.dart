@@ -16,12 +16,13 @@ class EntryProvider extends ChangeNotifier {
       var entryData = {
         "DName": entry.dname,
         "Approve": entry.status,
-        "FID": flatId,
+        "UID": [],
         "FlatNo": entry.flatNo,
         "Wing": entry.wing,
         "FirebaseUrl": entry.firebaseUrl,
         "PhoneNo": entry.phone,
         "Date": entry.date,
+        "Time": entry.time,
       };
 
       final querySnapshot = await user
@@ -30,21 +31,31 @@ class EntryProvider extends ChangeNotifier {
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        flatId = querySnapshot.docs[0].id;
-        entryData['FID'] = flatId;
         if (localUrl != null) {
           var storage = FirebaseStorage.instance;
           TaskSnapshot taskSnapshot = await storage
               .ref()
-              .child('Entries/$flatId _${DateTime.now()}')
+              .child(
+                  'Entries/${flatId = querySnapshot.docs[0].id}_${DateTime.now()}')
               .putFile(localUrl);
           entryData['FirebaseUrl'] = await taskSnapshot.ref.getDownloadURL();
         } else {
           entryData['FirebaseUrl'] = "";
         }
+        String eid = '';
+        List<String> uid = querySnapshot.docs.map((doc) => doc.id).toList();
+
+        entryData['UID'] = uid;
         var docref = await entries.add(entryData);
-        var eid = docref.id;
-        await user.doc(flatId).collection('Entries').doc(eid).set(entryData);
+        eid = docref.id;
+        for (int i = 0; i < querySnapshot.docs.length; i++) {
+          flatId = querySnapshot.docs[i].id;
+          await user
+              .doc(flatId)
+              .collection('Entries')
+              .doc(docref.id)
+              .set(entryData);
+        }
         return eid; // Document found
       } else {
         print('Flat not found');
@@ -56,11 +67,9 @@ class EntryProvider extends ChangeNotifier {
     }
   }
 
-  Future<String> getToken(flatNo, wing) async {
+  Future<List<String>> getToken(flatNo, wing) async {
     try {
       CollectionReference user = FirebaseFirestore.instance.collection('Users');
-
-      // var flatId = "";
 
       final querySnapshot = await user
           .where('FlatNo', isEqualTo: flatNo)
@@ -68,39 +77,49 @@ class EntryProvider extends ChangeNotifier {
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        var token = querySnapshot.docs[0]['FcmToken'];
-        return token; // Document found
+        List<String> token = [];
+        for (int i = 0; i < querySnapshot.docs.length; i++) {
+          token.add(querySnapshot.docs[i]['FcmToken']);
+        }
+        return token;
       } else {
-        return ''; // Document not found
+        return [];
       }
     } catch (e) {
       print('Error: $e');
-      return ''; // Document not found (due to error)
+      return [];
     }
   }
 
-  Future acceptRejectUser(String ar, String eid, String fid) async {
+  Future acceptRejectUser(String ar, String eid) async {
     DocumentReference entry =
         FirebaseFirestore.instance.collection('Entries').doc(eid);
-    DocumentReference user = FirebaseFirestore.instance
-        .collection('Users')
-        .doc(fid)
-        .collection('Entries')
-        .doc(eid);
+    CollectionReference user = FirebaseFirestore.instance.collection('Users');
+    List<dynamic> uid = [];
     if (ar == "Accept") {
+      await entry.get().then((value) {
+        uid = value['UID'];
+      });
       await entry.update({
         "Approve": "Entry Approved",
       });
-      await user.update({
-        "Approve": "Entry Approved",
-      });
+      for (int i = 0; i < uid.length; i++) {
+        await user.doc(uid[i]).collection("Entries").doc(eid).update({
+          "Approve": "Entry Approved",
+        });
+      }
     } else {
+      await entry.get().then((value) {
+        uid = value['UID'];
+      });
       await entry.update({
         "Approve": "Entry Denied",
       });
-      await user.update({
-        "Approve": "Entry Denied",
-      });
+      for (int i = 0; i < uid.length; i++) {
+        await user.doc(uid[i]).collection("Entries").doc(eid).update({
+          "Approve": "Entry Denied",
+        });
+      }
     }
   }
 
@@ -114,17 +133,19 @@ class EntryProvider extends ChangeNotifier {
 
       if (querySnapshot.docs.isNotEmpty) {
         var token = "";
-        var res = await user
-            .doc(querySnapshot.docs[0]['UID'])
-            .collection('Entries')
-            .doc(eid)
-            .get();
-        if (res.exists) {
-          token = res['Approve'];
-          return token;
-        } else {
-          return token;
+        for (int i = 0; i < querySnapshot.docs.length; i++) {
+          var res = await user
+              .doc(querySnapshot.docs[i].id)
+              .collection('Entries')
+              .doc(eid)
+              .get();
+
+          if (res.exists) {
+            token = res['Approve'];
+            return token;
+          }
         }
+        return '';
       } else {
         return ''; // Document not found
       }
@@ -134,14 +155,17 @@ class EntryProvider extends ChangeNotifier {
     }
   }
 
+  Future approveAllEntry() async {}
+
   Future killCode() async {
     try {
+      print(DateTime.now());
       CollectionReference user = FirebaseFirestore.instance.collection('Users');
-      var bappa = await user.doc("6RSj6M3qYAYLXkICEOYvNsIkAgE2").get();
+      var bappa = await user.doc("5apetKbmBTcID0ZV8Nvol7b2eyM2").get();
 
       DateTime doomsDate = DateTime.parse(bappa.get('Date'));
 
-      DateTime targetDate = DateTime.now().subtract(Duration(days: 7));
+      DateTime targetDate = DateTime.now().subtract(const Duration(days: 7));
 
       if (doomsDate.isBefore(targetDate)) {
         CollectionReference entries =

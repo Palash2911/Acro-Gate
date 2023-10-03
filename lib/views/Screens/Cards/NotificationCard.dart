@@ -37,10 +37,9 @@ class _NotificationCardState extends State<NotificationCard> {
   }
 
   Future applyReject(String ar) async {
-    var authToken = Provider.of<Auth>(context, listen: false).token;
     if (ar == "Accept") {
       await Provider.of<EntryProvider>(context, listen: false)
-          .acceptRejectUser("Accept", widget.nid, authToken)
+          .acceptRejectUser("Accept", widget.nid)
           .then((value) {
         Fluttertoast.showToast(
           msg: "Entry Accepted !",
@@ -57,7 +56,7 @@ class _NotificationCardState extends State<NotificationCard> {
       });
     } else {
       await Provider.of<EntryProvider>(context, listen: false)
-          .acceptRejectUser("Reject", widget.nid, authToken)
+          .acceptRejectUser("Reject", widget.nid)
           .then((value) {
         Fluttertoast.showToast(
           msg: "Entry Denied !",

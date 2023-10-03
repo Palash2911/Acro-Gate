@@ -7,6 +7,7 @@ class Entry {
   final String phone;
   String firebaseUrl;
   final String date;
+  final String time;
 
   Entry({
     required this.flatId,
@@ -17,5 +18,6 @@ class Entry {
     required this.phone,
     required this.firebaseUrl,
     required this.date,
+    required this.time,
   });
 }
