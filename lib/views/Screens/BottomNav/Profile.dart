@@ -61,6 +61,8 @@ class _ProfileState extends State<Profile> {
         value.wing,
         value.phone,
         value.firebaseUrl,
+        value.maidNames,
+        value.maidNumbers,
       ]);
     });
   }

@@ -170,6 +170,8 @@ class UserProvider extends ChangeNotifier {
         "FlatNo": user.flatNo,
         "Wing": user.wing,
         "ProfilePic": user.firebaseUrl,
+        "MaidNumbers": user.maidNumbers,
+        "MaidNames": user.maidNames,
       });
       prefs.setString('ProfilePic', user.firebaseUrl);
       prefs.setString("UserName", user.name);

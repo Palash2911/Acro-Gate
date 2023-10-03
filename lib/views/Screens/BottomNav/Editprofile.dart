@@ -26,12 +26,17 @@ class _EditProfileState extends State<EditProfile> {
   String get name => _nameController.text;
   String get phone => _phoneController.text;
   String get flat => _flatController.text;
+  List<TextEditingController> _maidNameControllers = [];
+  List<TextEditingController> _maidNumberControllers = [];
   String wing = "";
+  String maidEntry = "";
   var uid = "";
   var isInit = true;
   late String selectedFlat;
   String oldflat = "";
   String oldwing = "";
+  List<Maids> maidApprove = [];
+  List<MaidEntry> maidEntries = [];
 
   File? imageFile;
   String firebaseUrl = "";
@@ -42,42 +47,46 @@ class _EditProfileState extends State<EditProfile> {
 
   List<String> flats = [
     "Select Flat No",
+    "101",
+    "102",
+    "103",
+    "104",
+    "201",
+    "202",
+    "203",
+    "204",
+    "301",
+    "302",
+    "303",
+    "304",
+    "401",
+    "402",
+    "403",
+    "404",
+    "501",
+    "502",
+    "503",
+    "504",
+    "601",
+    "602",
+    "603",
+    "604",
+    "701",
+    "702",
+    "703",
+    "704",
+    "801",
+    "802",
+    "803",
+    "804",
+    "901",
+    "902",
+    "903",
+    "904",
     "1001",
     "1002",
     "1003",
     "1004",
-    "2001",
-    "2002",
-    "2003",
-    "2004",
-    "3001",
-    "3002",
-    "3003",
-    "3004",
-    "4001",
-    "4002",
-    "4003",
-    "4004",
-    "5001",
-    "5002",
-    "5003",
-    "5004",
-    "6001",
-    "6002",
-    "6003",
-    "6004",
-    "7001",
-    "7002",
-    "7003",
-    "7004",
-    "8001",
-    "8002",
-    "8003",
-    "8004",
-    "9001",
-    "9002",
-    "9003",
-    "9004",
     "1101",
     "1102",
     "1103",
@@ -94,6 +103,8 @@ class _EditProfileState extends State<EditProfile> {
     _nameController.text = "";
     _phoneController.text = "";
     _flatController.text = "";
+    maidApprove.add(Maids("Yes", false));
+    maidApprove.add(Maids("No", true));
     wings.add(Wing("A", Icons.battery_0_bar, false));
     wings.add(Wing("B", Icons.battery_3_bar, false));
     wings.add(Wing("C", Icons.battery_full, false));
@@ -103,15 +114,19 @@ class _EditProfileState extends State<EditProfile> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (isInit) {
+      List<dynamic> maidNames = [];
+      List<dynamic> maidNum = [];
       isLoading = true;
-      final List<String> arguments =
-          ModalRoute.of(context)!.settings.arguments as List<String>;
+      final List<dynamic> arguments =
+          ModalRoute.of(context)!.settings.arguments as List<dynamic>;
       _nameController.text = arguments[1].toString();
       _phoneController.text = arguments[4].toString();
       selectedFlat = arguments[2].toString();
       oldflat = selectedFlat;
       firebaseUrl = arguments[5].toString();
       wing = arguments[3].toString();
+      maidNames = arguments[6] as List;
+      maidNum = arguments[7] as List;
       oldwing = wing;
       wings.forEach((wings) {
         if (wings.wing == wing) {
@@ -120,6 +135,18 @@ class _EditProfileState extends State<EditProfile> {
           wings.isSelected = false;
         }
       });
+      if (maidNames.length > 0) {
+        maidEntry = "Yes";
+        maidApprove[0].isSelected = true;
+        maidApprove[1].isSelected = false;
+        for (int i = 0; i < maidNames.length; i++) {
+          maidEntries.add(MaidEntry(maidNames[i], maidNum[i]));
+        }
+        for (int i = 0; i < maidEntries.length; i++) {
+          _maidNameControllers.add(TextEditingController(text: maidEntries[i].name));
+          _maidNumberControllers.add(TextEditingController(text: maidEntries[i].number));
+        }
+      }
       setState(() {
         isLoading = false;
       });
@@ -132,10 +159,16 @@ class _EditProfileState extends State<EditProfile> {
     _nameController.dispose();
     _phoneController.dispose();
     _flatController.dispose();
+    for (var controller in _maidNameControllers) {
+      controller.dispose();
+    }
+    for (var controller in _maidNumberControllers) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
-  Future _createProfile(BuildContext ctx) async {
+  Future _updateProfile(BuildContext ctx) async {
     var authProvider = Provider.of<Auth>(ctx, listen: false);
     var userProvider = Provider.of<UserProvider>(ctx, listen: false);
     final isValid = _form.currentState!.validate();
@@ -144,6 +177,14 @@ class _EditProfileState extends State<EditProfile> {
     });
     _form.currentState!.save();
     if (isValid) {
+      List<String> maidNamesList = [];
+      List<String> maidNumList = [];
+      for (TextEditingController controller in _maidNameControllers) {
+        maidNamesList.add(controller.text);
+      }
+      for (TextEditingController controller in _maidNumberControllers) {
+        maidNumList.add(controller.text);
+      }
       await userProvider
           .updateUser(
         Users(
@@ -154,8 +195,8 @@ class _EditProfileState extends State<EditProfile> {
           wing: wing,
           localUrl: imageFile,
           firebaseUrl: firebaseUrl,
-          maidNames: [],
-          maidNumbers: [],
+          maidNames: maidEntry == "No" ? [] : maidNamesList,
+          maidNumbers: maidEntry == "No" ? [] : maidNumList,
         ),
         oldflat,
         oldwing,
@@ -185,7 +226,8 @@ class _EditProfileState extends State<EditProfile> {
             isLoading = false;
           });
           const initin = 2;
-          Navigator.of(ctx).pushReplacementNamed(UserBottomBar.routeName, arguments: initin);
+          Navigator.of(ctx)
+              .pushReplacementNamed(UserBottomBar.routeName, arguments: initin);
         });
       });
     } else {
@@ -469,6 +511,206 @@ class _EditProfileState extends State<EditProfile> {
                               ],
                             ),
                             const SizedBox(height: 15.0),
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.person_4,
+                                  size: 32.0,
+                                  color: Colors.grey,
+                                ),
+                                const SizedBox(width: 12.0),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.green.shade100,
+                                    border: Border.all(
+                                        color: kprimaryColor, width: 2),
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      const SizedBox(width: 10.0),
+                                      Text(
+                                        'Maid Approval',
+                                        style: kTextPopR14.copyWith(
+                                            color: Colors.black54),
+                                      ),
+                                      const SizedBox(width: 9.0),
+                                      SizedBox(
+                                        height: 50,
+                                        width: 120,
+                                        child: ListView.builder(
+                                            scrollDirection: Axis.horizontal,
+                                            shrinkWrap: true,
+                                            itemCount: maidApprove.length,
+                                            itemBuilder: (context, index) {
+                                              return InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    maidApprove.forEach(
+                                                        (maid) =>
+                                                            maid.isSelected =
+                                                                false);
+                                                    maidApprove[index]
+                                                        .isSelected = true;
+                                                    maidEntry =
+                                                        maidApprove[index]
+                                                            .approve;
+                                                  });
+                                                },
+                                                child: Container(
+                                                  margin: const EdgeInsets.only(
+                                                      right: 9),
+                                                  child: Chip(
+                                                    label: Text(
+                                                      maidApprove[index]
+                                                          .approve,
+                                                      style: TextStyle(
+                                                          fontSize: 12,
+                                                          color: !maidApprove[
+                                                                      index]
+                                                                  .isSelected
+                                                              ? Colors.green
+                                                              : Colors.white),
+                                                    ),
+                                                    backgroundColor:
+                                                        !maidApprove[index]
+                                                                .isSelected
+                                                            ? Colors.white
+                                                            : Colors.green,
+                                                  ),
+                                                ),
+                                              );
+                                            }),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 15.0),
+                            maidEntry == "Yes"
+                                ? Column(
+                                    children: List.generate(
+                                      maidEntries.length,
+                                      (index) => Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 8.0),
+                                        child: Row(
+                                          children: [
+                                            Flexible(
+                                              child: TextFormField(
+                                                controller:
+                                                    _maidNameControllers[index],
+                                                keyboardType:
+                                                    TextInputType.name,
+                                                decoration: InputDecoration(
+                                                  hintText: "Maid Name",
+                                                  hintStyle: kTextPopR14,
+                                                  filled: true,
+                                                  fillColor:
+                                                      Colors.green.shade100,
+                                                  border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    borderSide: BorderSide.none,
+                                                  ),
+                                                ),
+                                                validator: (value) {
+                                                  if (value!.isEmpty) {
+                                                    return 'Please enter maid name!';
+                                                  }
+                                                  return null;
+                                                },
+                                                textInputAction:
+                                                    TextInputAction.next,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 12.0),
+                                            Flexible(
+                                              child: TextFormField(
+                                                maxLength: 10,
+                                                controller:
+                                                    _maidNumberControllers[
+                                                        index],
+                                                keyboardType:
+                                                    TextInputType.number,
+                                                decoration: InputDecoration(
+                                                  counterText: '',
+                                                  hintText: "Maid Number",
+                                                  hintStyle: kTextPopR14,
+                                                  filled: true,
+                                                  fillColor:
+                                                      Colors.green.shade100,
+                                                  border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    borderSide: BorderSide.none,
+                                                  ),
+                                                ),
+                                                textInputAction:
+                                                    TextInputAction.next,
+                                                validator: (value) {
+                                                  if (value!.isEmpty) {
+                                                    return 'Please enter maid phone number';
+                                                  }
+                                                  final phoneRegex =
+                                                      RegExp(r'^\+?\d{9,15}$');
+                                                  if (!phoneRegex
+                                                      .hasMatch(value)) {
+                                                    return 'Please enter a valid phone number';
+                                                  }
+                                                  return null;
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                : const SizedBox(
+                                    height: 1,
+                                  ),
+                            const SizedBox(height: 15.0),
+                            maidEntry == "Yes"
+                                ? Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      maidEntries.isNotEmpty
+                                          ? ElevatedButton(
+                                              onPressed: () {
+                                                setState(() {
+                                                  maidEntries.removeLast();
+                                                  _maidNumberControllers
+                                                      .removeLast();
+                                                  _maidNameControllers
+                                                      .removeLast();
+                                                });
+                                              },
+                                              child: const Text("Remove Maid"),
+                                            )
+                                          : SizedBox(
+                                              width: 1,
+                                            ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            maidEntries.add(MaidEntry('', ''));
+                                            _maidNameControllers
+                                                .add(TextEditingController());
+                                            _maidNumberControllers
+                                                .add(TextEditingController());
+                                          });
+                                        },
+                                        child: const Text("Add Maid"),
+                                      ),
+                                    ],
+                                  )
+                                : const SizedBox(height: 1.0),
+                            const SizedBox(height: 15.0),
                             SizedBox(
                               height: 60, //height of button
                               width: 250, //width of button
@@ -483,7 +725,7 @@ class _EditProfileState extends State<EditProfile> {
                                     padding: const EdgeInsets.all(
                                         20) //content padding inside button
                                     ),
-                                onPressed: () => _createProfile(context),
+                                onPressed: () => _updateProfile(context),
                                 child: const Text(
                                   "Update Profile",
                                   style: TextStyle(fontSize: 18),
@@ -509,4 +751,18 @@ class Wing {
   bool isSelected;
 
   Wing(this.wing, this.icon, this.isSelected);
+}
+
+class Maids {
+  String approve;
+  bool isSelected;
+
+  Maids(this.approve, this.isSelected);
+}
+
+class MaidEntry {
+  String name;
+  String number;
+
+  MaidEntry(this.name, this.number);
 }

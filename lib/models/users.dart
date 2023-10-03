@@ -8,8 +8,8 @@ class Users {
   final String wing;
   final File? localUrl;
   String firebaseUrl;
-  final List<String> maidNames;
-  final List<String> maidNumbers;
+  final List<dynamic> maidNames;
+  final List<dynamic> maidNumbers;
 
   Users({
     required this.id,
