@@ -12,6 +12,8 @@ class NotificationCard extends StatefulWidget {
   final String status;
   final String url;
   final String phone;
+  final String date;
+  final String time;
 
   const NotificationCard({
     super.key,
@@ -20,6 +22,8 @@ class NotificationCard extends StatefulWidget {
     required this.status,
     required this.url,
     required this.phone,
+    required this.date,
+    required this.time,
   });
 
   @override
@@ -89,11 +93,25 @@ class _NotificationCardState extends State<NotificationCard> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            CircleAvatar(
-              radius: 50.0,
-              backgroundImage: widget.url.isNotEmpty
-                  ? Image.network(widget.url).image
-                  : const AssetImage('assets/images/logo.png'),
+            Column(
+              children: [
+                const SizedBox(height: 15,),
+                CircleAvatar(
+                  radius: 40.0,
+                  backgroundImage: widget.url.isNotEmpty
+                      ? Image.network(widget.url).image
+                      : const AssetImage('assets/images/logo.png'),
+                ),
+                const SizedBox(height: 9,),
+                Text(
+                  "Date: ${widget.date}",
+                  style: kTextPopR12,
+                ),
+                Text(
+                  "Time: ${widget.time}",
+                  style: kTextPopR12,
+                )
+              ],
             ),
             SizedBox(
               height: 100,

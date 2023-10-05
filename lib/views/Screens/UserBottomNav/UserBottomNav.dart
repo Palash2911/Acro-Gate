@@ -1,6 +1,6 @@
-import 'package:acrogate/views/Screens/BottomNav/History.dart';
-import 'package:acrogate/views/Screens/BottomNav/Homepage.dart';
-import 'package:acrogate/views/Screens/BottomNav/Profile.dart';
+import 'package:acrogate/views/Screens/UserBottomNav/History.dart';
+import 'package:acrogate/views/Screens/UserBottomNav/Homepage.dart';
+import 'package:acrogate/views/Screens/UserBottomNav/Profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
@@ -18,7 +18,7 @@ class UserBottomBar extends StatefulWidget {
 
 class _UserBottomBarState extends State<UserBottomBar> {
   late PersistentTabController _controller =
-      PersistentTabController(initialIndex: 0);
+  PersistentTabController(initialIndex: 0);
 
   @override
   void didChangeDependencies() {

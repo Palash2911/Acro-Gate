@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class EntryProvider extends ChangeNotifier {
-  Future<String> newEntry(Entry entry, File localUrl) async {
+  Future<String> newEntry(Entry entry, File? localUrl) async {
     try {
       CollectionReference entries =
           FirebaseFirestore.instance.collection('Entries');

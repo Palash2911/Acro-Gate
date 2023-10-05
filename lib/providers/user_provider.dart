@@ -1,3 +1,4 @@
+import 'package:acrogate/models/maids.dart';
 import 'package:flutter/material.dart';
 import 'package:acrogate/models/users.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -46,10 +47,32 @@ class UserProvider extends ChangeNotifier {
           phone: user.phone,
           wing: user.wing));
 
+      await registerMaid(user);
+
       notifyListeners();
     } catch (e) {
       prefs.setBool('Profile', false);
       prefs.setString('ProfilePic', "");
+      notifyListeners();
+      rethrow;
+    }
+  }
+
+  Future registerMaid(Users user) async {
+    try {
+      CollectionReference maids =
+          FirebaseFirestore.instance.collection('Maids');
+      for (int i = 0; i < user.maidNames.length; i++) {
+         await maids.doc().set({
+          "MaidName": user.maidNames[i],
+          "MaidPhoneNo": user.maidNumbers[i],
+          "UID": user.id,
+          "FlatNo": user.flatNo,
+          "Wing": user.wing,
+        });
+      }
+      notifyListeners();
+    } catch (e) {
       notifyListeners();
       rethrow;
     }
@@ -132,16 +155,15 @@ class UserProvider extends ChangeNotifier {
       await users.doc(uid.toString()).get().then((DocumentSnapshot query) {
         Map<String, dynamic> data = query.data() as Map<String, dynamic>;
         user = Users(
-          id: data["UID"],
-          flatNo: data["FlatNo"],
-          name: data["Name"],
-          phone: data["PhoneNo"],
-          wing: data["Wing"],
-          localUrl: null,
-          firebaseUrl: data['ProfilePic'],
-          maidNumbers: data['MaidNumbers'],
-          maidNames: data['MaidNames']
-        );
+            id: data["UID"],
+            flatNo: data["FlatNo"],
+            name: data["Name"],
+            phone: data["PhoneNo"],
+            wing: data["Wing"],
+            localUrl: null,
+            firebaseUrl: data['ProfilePic'],
+            maidNumbers: data['MaidNumbers'],
+            maidNames: data['MaidNames']);
       });
       notifyListeners();
       return user;

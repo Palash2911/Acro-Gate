@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:acrogate/main.dart';
-import 'package:acrogate/views/Screens/BottomNav/UserBottomNav.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 

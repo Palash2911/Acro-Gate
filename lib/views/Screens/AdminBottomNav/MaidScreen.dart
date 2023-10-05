@@ -1,31 +1,27 @@
 import 'package:acrogate/providers/entry_provider.dart';
 import 'package:acrogate/views/Screens/Cards/HomepageCard.dart';
+import 'package:acrogate/views/Screens/Cards/MaidCard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../constants.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class MaidScreen extends StatefulWidget {
+  const MaidScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<MaidScreen> createState() => _MaidScreenState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _MaidScreenState extends State<MaidScreen> {
   var dataLoaded = true;
 
-  CollectionReference flatRef = FirebaseFirestore.instance.collection('Flats');
+  CollectionReference maidRef = FirebaseFirestore.instance.collection('Maids');
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _getData();
-    _killCode();
-  }
-
-  void _killCode() async {
-    await Provider.of<EntryProvider>(context,listen: false).killCode();
   }
 
   Future<void> _getData() async {
@@ -48,7 +44,7 @@ class _HomePageState extends State<HomePage> {
               title: const Padding(
                 padding: EdgeInsets.fromLTRB(12.0, 2.0, 0.0, 0.0),
                 child: Text(
-                  'Acro Gate',
+                  'Maid Entries',
                 ),
               ),
             ),
@@ -56,13 +52,13 @@ class _HomePageState extends State<HomePage> {
               child: SafeArea(
                 child: Container(
                   height: MediaQuery.of(context).size.height -
-                      4*kBottomNavigationBarHeight,
+                      4 * kBottomNavigationBarHeight,
                   padding: const EdgeInsets.only(bottom: 40, top: 20),
                   child: Column(
                     children: [
                       Expanded(
                         child: StreamBuilder<QuerySnapshot>(
-                          stream: flatRef.snapshots(),
+                          stream: maidRef.orderBy('FlatNo').snapshots(),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData) {
                               return const Center(
@@ -82,7 +78,7 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                       const SizedBox(height: 20.0),
                                       Text(
-                                        "No Flats Listed Yet !",
+                                        "No Maids Registered Yet !",
                                         style: kTextPopM16,
                                       ),
                                     ],
@@ -92,14 +88,12 @@ class _HomePageState extends State<HomePage> {
                                 return ListView(
                                   scrollDirection: Axis.vertical,
                                   shrinkWrap: true,
-                                  children:
-                                      snapshot.data!.docs.map((document) {
-                                    return HomePageCard(
-                                      name: document['Name'],
+                                  children: snapshot.data!.docs.map((document) {
+                                    return MaidCard(
+                                      name: document['MaidName'],
                                       flatNo: document['FlatNo'],
                                       wing: document['Wing'],
-                                      imageUrl: '',
-                                      number: document['PhoneNo'],
+                                      number: document['MaidPhoneNo'],
                                     );
                                   }).toList(),
                                 );

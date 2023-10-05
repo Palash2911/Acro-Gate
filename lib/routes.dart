@@ -1,6 +1,7 @@
-import 'package:acrogate/views/Screens/AdminSide.dart';
-import 'package:acrogate/views/Screens/BottomNav/Editprofile.dart';
-import 'package:acrogate/views/Screens/BottomNav/UserBottomNav.dart';
+import 'package:acrogate/views/Screens/AdminBottomNav/AdminBottomNav.dart';
+import 'package:acrogate/views/Screens/AdminBottomNav/AdminSide.dart';
+import 'package:acrogate/views/Screens/UserBottomNav/Editprofile.dart';
+import 'package:acrogate/views/Screens/UserBottomNav/UserBottomNav.dart';
 import 'package:acrogate/views/Screens/Onboarding/Login.dart';
 import 'package:acrogate/views/Screens/Onboarding/OTP.dart';
 import 'package:acrogate/views/Screens/Onboarding/Register.dart';
@@ -23,6 +24,7 @@ var approutes = <String, WidgetBuilder>{
 
   //Admin Side
   AdminSide.routeName: (context) => const AdminSide(),
+  AdminBottomBar.routeName: (context) => const AdminBottomBar(),
 
   //Edit Profile
   EditProfile.routeName: (context) => const EditProfile(),

@@ -48,7 +48,7 @@ class _HistoryState extends State<History> {
             const SizedBox(height: 30.0),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
-                stream: entryRef.snapshots(),
+                stream: entryRef.orderBy("Date").snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return const Center(
@@ -67,6 +67,8 @@ class _HistoryState extends State<History> {
                                 status: document['Approve'],
                                 url: document['FirebaseUrl'],
                                 phone: document['PhoneNo'],
+                                date: document['Date'],
+                                time: document['Time'],
                               );
                             }).toList()
                           : [

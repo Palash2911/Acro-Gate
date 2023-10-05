@@ -1,12 +1,13 @@
 import 'package:acrogate/providers/auth_provider.dart';
-import 'package:acrogate/views/Screens/BottomNav/UserBottomNav.dart';
+import 'package:acrogate/views/Screens/AdminBottomNav/AdminBottomNav.dart';
+import 'package:acrogate/views/Screens/UserBottomNav/UserBottomNav.dart';
 import 'package:acrogate/views/Screens/Onboarding/Login.dart';
 import 'package:acrogate/views/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:acrogate/views/Screens/SizeConfig.dart';
 import 'package:provider/provider.dart';
 
-import '../AdminSide.dart';
+import '../AdminBottomNav/AdminSide.dart';
 
 class SplashScreen extends StatefulWidget {
   static var routeName = "/splash";
@@ -30,10 +31,10 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(const Duration(seconds: 2), () async {
       await authProvider.autoLogin().then((_) async {
         if (authProvider.token == "6RSj6M3qYAYLXkICEOYvNsIkAgE2") {
-          Navigator.of(ctx).pushReplacementNamed(AdminSide.routeName);
+          Navigator.of(ctx).pushReplacementNamed(AdminBottomBar.routeName);
         } else {
           if (authProvider.isAuth) {
-            const initin = 0;
+            const initin = 1;
             Navigator.of(ctx).pushReplacementNamed(UserBottomBar.routeName, arguments: initin);
           } else {
             Navigator.of(ctx).pushReplacementNamed(LogIn.routeName);

@@ -1,6 +1,7 @@
 import 'package:acrogate/providers/auth_provider.dart';
 import 'package:acrogate/providers/user_provider.dart';
-import 'package:acrogate/views/Screens/AdminSide.dart';
+import 'package:acrogate/views/Screens/AdminBottomNav/AdminBottomNav.dart';
+import 'package:acrogate/views/Screens/AdminBottomNav/AdminSide.dart';
 import 'package:acrogate/views/Screens/Onboarding/Login.dart';
 import 'package:acrogate/views/Screens/Onboarding/Register.dart';
 import 'package:acrogate/views/constants.dart';
@@ -11,7 +12,7 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/firebasenotification.dart';
-import '../BottomNav/UserBottomNav.dart';
+import '../UserBottomNav/UserBottomNav.dart';
 
 class OtpScreen extends StatefulWidget {
   static var routeName = "/otp-screen";
@@ -88,7 +89,7 @@ class _OtpScreenState extends State<OtpScreen> {
         var user = await authProvider.checkUser();
         var fcmT = await FirebaseNotification().getToken();
         if (phoneNo == "+911234567890") {
-          Navigator.of(ctx).pushReplacementNamed(AdminSide.routeName);
+          Navigator.of(ctx).pushReplacementNamed(AdminBottomBar.routeName);
         } else {
           if (user) {
             await Provider.of<UserProvider>(context, listen: false)
