@@ -35,17 +35,20 @@ class UserProvider extends ChangeNotifier {
         "FcmToken": fcmT,
         "MaidNumbers": user.maidNumbers,
         "MaidNames": user.maidNames,
+        "Privacy": user.privacy,
       });
 
       prefs.setBool('Profile', true);
       prefs.setString('ProfilePic', user.firebaseUrl);
 
       await registerFlat(Flats(
-          flatId: "",
-          flatNo: user.flatNo,
-          oname: user.name,
-          phone: user.phone,
-          wing: user.wing));
+        flatId: "",
+        flatNo: user.flatNo,
+        oname: user.name,
+        phone: user.phone,
+        wing: user.wing,
+        private: user.privacy,
+      ));
 
       await registerMaid(user);
 
@@ -63,7 +66,7 @@ class UserProvider extends ChangeNotifier {
       CollectionReference maids =
           FirebaseFirestore.instance.collection('Maids');
       for (int i = 0; i < user.maidNames.length; i++) {
-         await maids.doc().set({
+        await maids.doc().set({
           "MaidName": user.maidNames[i],
           "MaidPhoneNo": user.maidNumbers[i],
           "UID": user.id,
@@ -103,6 +106,7 @@ class UserProvider extends ChangeNotifier {
         "FID": "",
         "FlatNo": flats.flatNo,
         "Wing": flats.wing,
+        "Private": flats.private,
       };
 
       var docRef = await flat.add(flatData);
@@ -135,6 +139,7 @@ class UserProvider extends ChangeNotifier {
         "FID": flats.flatId,
         "FlatNo": flats.flatNo,
         "Wing": flats.wing,
+        "Private": flats.private,
       });
 
       notifyListeners();
@@ -155,15 +160,17 @@ class UserProvider extends ChangeNotifier {
       await users.doc(uid.toString()).get().then((DocumentSnapshot query) {
         Map<String, dynamic> data = query.data() as Map<String, dynamic>;
         user = Users(
-            id: data["UID"],
-            flatNo: data["FlatNo"],
-            name: data["Name"],
-            phone: data["PhoneNo"],
-            wing: data["Wing"],
-            localUrl: null,
-            firebaseUrl: data['ProfilePic'],
-            maidNumbers: data['MaidNumbers'],
-            maidNames: data['MaidNames']);
+          id: data["UID"],
+          flatNo: data["FlatNo"],
+          name: data["Name"],
+          phone: data["PhoneNo"],
+          wing: data["Wing"],
+          localUrl: null,
+          firebaseUrl: data['ProfilePic'],
+          maidNumbers: data['MaidNumbers'],
+          maidNames: data['MaidNames'],
+          privacy: data['Privacy'],
+        );
       });
       notifyListeners();
       return user;
@@ -194,16 +201,19 @@ class UserProvider extends ChangeNotifier {
         "ProfilePic": user.firebaseUrl,
         "MaidNumbers": user.maidNumbers,
         "MaidNames": user.maidNames,
+        "Privacy": user.privacy,
       });
       prefs.setString('ProfilePic', user.firebaseUrl);
       prefs.setString("UserName", user.name);
       updateFlat(
           Flats(
-              flatId: "",
-              flatNo: user.flatNo,
-              oname: user.name,
-              phone: user.phone,
-              wing: user.wing),
+            flatId: "",
+            flatNo: user.flatNo,
+            oname: user.name,
+            phone: user.phone,
+            wing: user.wing,
+            private: user.privacy,
+          ),
           oldFlatno,
           oldWing);
       notifyListeners();

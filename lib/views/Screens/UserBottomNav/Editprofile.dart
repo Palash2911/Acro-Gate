@@ -37,6 +37,8 @@ class _EditProfileState extends State<EditProfile> {
   String oldwing = "";
   List<Maids> maidApprove = [];
   List<MaidEntry> maidEntries = [];
+  String privacy = "";
+  List<Maids> privacies = [];
 
   File? imageFile;
   String firebaseUrl = "";
@@ -81,6 +83,8 @@ class _EditProfileState extends State<EditProfile> {
     _flatController.text = "";
     maidApprove.add(Maids("Yes", false));
     maidApprove.add(Maids("No", true));
+    privacies.add(Maids("Yes", false));
+    privacies.add(Maids("No", false));
     wings.add(Wing("A", Icons.battery_0_bar, false));
     wings.add(Wing("B", Icons.battery_3_bar, false));
     wings.add(Wing("C", Icons.battery_full, false));
@@ -101,6 +105,7 @@ class _EditProfileState extends State<EditProfile> {
       oldflat = selectedFlat;
       firebaseUrl = arguments[5].toString();
       wing = arguments[3].toString();
+      privacy = arguments[8].toString();
       maidNames = arguments[6] as List;
       maidNum = arguments[7] as List;
       oldwing = wing;
@@ -109,6 +114,13 @@ class _EditProfileState extends State<EditProfile> {
           wings.isSelected = true;
         } else {
           wings.isSelected = false;
+        }
+      });
+      privacies.forEach((element) {
+        if (element.approve == privacy) {
+          element.isSelected = true;
+        } else {
+          element.isSelected = false;
         }
       });
       if (maidNames.isNotEmpty) {
@@ -173,6 +185,7 @@ class _EditProfileState extends State<EditProfile> {
           firebaseUrl: firebaseUrl,
           maidNames: maidEntry == "No" ? [] : maidNamesList,
           maidNumbers: maidEntry == "No" ? [] : maidNumList,
+          privacy: privacy,
         ),
         oldflat,
         oldwing,
@@ -370,6 +383,81 @@ class _EditProfileState extends State<EditProfile> {
                               },
                             ),
 
+                            const SizedBox(height: 15.0),
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.lock,
+                                  size: 32.0,
+                                  color: Colors.grey,
+                                ),
+                                const SizedBox(width: 12.0),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.green.shade100,
+                                    border: Border.all(
+                                        color: kprimaryColor, width: 2),
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      const SizedBox(width: 10.0),
+                                      Text(
+                                        'Number Privacy',
+                                        style: kTextPopR14.copyWith(
+                                            color: Colors.black54),
+                                      ),
+                                      const SizedBox(width: 9.0),
+                                      SizedBox(
+                                        height: 50,
+                                        width: 120,
+                                        child: ListView.builder(
+                                            scrollDirection: Axis.horizontal,
+                                            shrinkWrap: true,
+                                            itemCount: privacies.length,
+                                            itemBuilder: (context, index) {
+                                              return InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    privacies.forEach(
+                                                            (private) =>
+                                                        private.isSelected =
+                                                        false);
+                                                    privacies[index]
+                                                        .isSelected = true;
+                                                    privacy = privacies[index]
+                                                        .approve;
+                                                  });
+                                                },
+                                                child: Container(
+                                                  margin: const EdgeInsets.only(
+                                                      right: 9),
+                                                  child: Chip(
+                                                    label: Text(
+                                                      privacies[index].approve,
+                                                      style: TextStyle(
+                                                          fontSize: 12,
+                                                          color: !privacies[
+                                                          index]
+                                                              .isSelected
+                                                              ? Colors.green
+                                                              : Colors.white),
+                                                    ),
+                                                    backgroundColor:
+                                                    !privacies[index]
+                                                        .isSelected
+                                                        ? Colors.white
+                                                        : Colors.green,
+                                                  ),
+                                                ),
+                                              );
+                                            }),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                             const SizedBox(height: 15.0),
                             //  WING
                             Row(

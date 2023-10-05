@@ -63,6 +63,7 @@ class _ProfileState extends State<Profile> {
         value.firebaseUrl,
         value.maidNames,
         value.maidNumbers,
+        value.privacy,
       ]);
     });
   }

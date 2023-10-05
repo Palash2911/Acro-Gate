@@ -10,6 +10,7 @@ class Users {
   String firebaseUrl;
   final List<dynamic> maidNames;
   final List<dynamic> maidNumbers;
+  final String privacy;
 
   Users({
     required this.id,
@@ -21,5 +22,6 @@ class Users {
     required this.firebaseUrl,
     required this.maidNames,
     required this.maidNumbers,
+    required this.privacy,
   });
 }

@@ -100,6 +100,7 @@ class _HomePageState extends State<HomePage> {
                                       wing: document['Wing'],
                                       imageUrl: '',
                                       number: document['PhoneNo'],
+                                      private: document['Private'],
                                     );
                                   }).toList(),
                                 );

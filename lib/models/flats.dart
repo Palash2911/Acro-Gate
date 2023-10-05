@@ -4,6 +4,7 @@ class Flats {
   final String oname;
   final String phone;
   final String wing;
+  final String private;
 
   Flats({
     required this.flatId,
@@ -11,5 +12,6 @@ class Flats {
     required this.oname,
     required this.phone,
     required this.wing,
+    required this.private,
   });
 }

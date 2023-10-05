@@ -31,6 +31,7 @@ class _RegisterState extends State<Register> {
   List<TextEditingController> _maidNumberControllers = [];
   String wing = "";
   String maidEntry = "";
+  String privacy = "";
   late String selectedFlat;
 
   File? imageFile;
@@ -40,6 +41,7 @@ class _RegisterState extends State<Register> {
   List<Wing> wings = [];
   List<Maids> maidApprove = [];
   List<MaidEntry> maidEntries = [];
+  List<Maids> privacies = [];
 
   List<String> flats = [
     "Select Flat No",
@@ -78,6 +80,8 @@ class _RegisterState extends State<Register> {
     selectedFlat = flats[0];
     maidApprove.add(Maids("Yes", false));
     maidApprove.add(Maids("No", true));
+    privacies.add(Maids("Yes", false));
+    privacies.add(Maids("No", false));
     wings.add(Wing("A", Icons.battery_0_bar, false));
     wings.add(Wing("B", Icons.battery_3_bar, false));
     wings.add(Wing("C", Icons.battery_full, false));
@@ -140,6 +144,7 @@ class _RegisterState extends State<Register> {
           firebaseUrl: "",
           maidNames: maidEntry == "No" ? [] : maidNamesList,
           maidNumbers: maidEntry == "No" ? [] : maidNumList,
+          privacy: privacy,
         ),
       )
           .catchError((e) {
@@ -325,6 +330,81 @@ class _RegisterState extends State<Register> {
                               },
                             ),
                             const SizedBox(height: 15.0),
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.lock,
+                                  size: 32.0,
+                                  color: Colors.grey,
+                                ),
+                                const SizedBox(width: 12.0),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.green.shade100,
+                                    border: Border.all(
+                                        color: kprimaryColor, width: 2),
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      const SizedBox(width: 10.0),
+                                      Text(
+                                        'Number Privacy',
+                                        style: kTextPopR14.copyWith(
+                                            color: Colors.black54),
+                                      ),
+                                      const SizedBox(width: 9.0),
+                                      SizedBox(
+                                        height: 50,
+                                        width: 120,
+                                        child: ListView.builder(
+                                            scrollDirection: Axis.horizontal,
+                                            shrinkWrap: true,
+                                            itemCount: privacies.length,
+                                            itemBuilder: (context, index) {
+                                              return InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    privacies.forEach(
+                                                        (private) =>
+                                                            private.isSelected =
+                                                                false);
+                                                    privacies[index]
+                                                        .isSelected = true;
+                                                    privacy = privacies[index]
+                                                        .approve;
+                                                  });
+                                                },
+                                                child: Container(
+                                                  margin: const EdgeInsets.only(
+                                                      right: 9),
+                                                  child: Chip(
+                                                    label: Text(
+                                                      privacies[index].approve,
+                                                      style: TextStyle(
+                                                          fontSize: 12,
+                                                          color: !privacies[
+                                                                      index]
+                                                                  .isSelected
+                                                              ? Colors.green
+                                                              : Colors.white),
+                                                    ),
+                                                    backgroundColor:
+                                                        !privacies[index]
+                                                                .isSelected
+                                                            ? Colors.white
+                                                            : Colors.green,
+                                                  ),
+                                                ),
+                                              );
+                                            }),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 15.0),
                             //  WING
                             Row(
                               children: [
@@ -407,15 +487,18 @@ class _RegisterState extends State<Register> {
                                 Container(
                                   padding: const EdgeInsets.only(left: 9.0),
                                   decoration: BoxDecoration(
-                                    border:
-                                    Border.all(color: kprimaryColor, width: 2.0),
+                                    border: Border.all(
+                                        color: kprimaryColor, width: 2.0),
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
-                                  width: MediaQuery.of(context).size.width * 0.44,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.44,
                                   child: DropdownButton<String>(
-                                    value:
-                                    selectedFlat.isNotEmpty ? selectedFlat : "",
-                                    hint: Text("Select Flat", style: kTextPopR14),
+                                    value: selectedFlat.isNotEmpty
+                                        ? selectedFlat
+                                        : "",
+                                    hint:
+                                        Text("Select Flat", style: kTextPopR14),
                                     onChanged: (String? newValue) {
                                       setState(() {
                                         selectedFlat = newValue ?? "";
@@ -427,7 +510,8 @@ class _RegisterState extends State<Register> {
                                         child: Text(item, style: kTextPopR14),
                                       );
                                     }).toList(),
-                                    style: kTextPopR14.copyWith(color: Colors.black),
+                                    style: kTextPopR14.copyWith(
+                                        color: Colors.black),
                                     icon: const Icon(IconData(0)),
                                     isExpanded: true,
                                     underline: Container(),
@@ -519,20 +603,26 @@ class _RegisterState extends State<Register> {
                                     children: List.generate(
                                       maidEntries.length,
                                       (index) => Padding(
-                                        padding: const EdgeInsets.only(bottom: 8.0),
+                                        padding:
+                                            const EdgeInsets.only(bottom: 8.0),
                                         child: Row(
                                           children: [
                                             Flexible(
                                               child: TextFormField(
-                                                controller: _maidNameControllers[index],
-                                                keyboardType: TextInputType.name,
+                                                controller:
+                                                    _maidNameControllers[index],
+                                                keyboardType:
+                                                    TextInputType.name,
                                                 decoration: InputDecoration(
                                                   hintText: "Maid Name",
                                                   hintStyle: kTextPopR14,
                                                   filled: true,
-                                                  fillColor: Colors.green.shade100,
+                                                  fillColor:
+                                                      Colors.green.shade100,
                                                   border: OutlineInputBorder(
-                                                    borderRadius: BorderRadius.circular(10),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
                                                     borderSide: BorderSide.none,
                                                   ),
                                                 ),
@@ -542,33 +632,43 @@ class _RegisterState extends State<Register> {
                                                   }
                                                   return null;
                                                 },
-                                                textInputAction: TextInputAction.next,
+                                                textInputAction:
+                                                    TextInputAction.next,
                                               ),
                                             ),
                                             const SizedBox(width: 12.0),
                                             Flexible(
                                               child: TextFormField(
                                                 maxLength: 10,
-                                                controller: _maidNumberControllers[index],
-                                                keyboardType: TextInputType.number,
+                                                controller:
+                                                    _maidNumberControllers[
+                                                        index],
+                                                keyboardType:
+                                                    TextInputType.number,
                                                 decoration: InputDecoration(
                                                   counterText: '',
                                                   hintText: "Maid Number",
                                                   hintStyle: kTextPopR14,
                                                   filled: true,
-                                                  fillColor: Colors.green.shade100,
+                                                  fillColor:
+                                                      Colors.green.shade100,
                                                   border: OutlineInputBorder(
-                                                    borderRadius: BorderRadius.circular(10),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
                                                     borderSide: BorderSide.none,
                                                   ),
                                                 ),
-                                                textInputAction: TextInputAction.next,
+                                                textInputAction:
+                                                    TextInputAction.next,
                                                 validator: (value) {
                                                   if (value!.isEmpty) {
                                                     return 'Please enter maid phone number';
                                                   }
-                                                  final phoneRegex = RegExp(r'^\+?\d{9,15}$');
-                                                  if (!phoneRegex.hasMatch(value)) {
+                                                  final phoneRegex =
+                                                      RegExp(r'^\+?\d{9,15}$');
+                                                  if (!phoneRegex
+                                                      .hasMatch(value)) {
                                                     return 'Please enter a valid phone number';
                                                   }
                                                   return null;
@@ -584,31 +684,42 @@ class _RegisterState extends State<Register> {
                                     height: 1,
                                   ),
                             const SizedBox(height: 15.0),
-                            maidEntry == "Yes" ? Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                maidEntries.length > 0 ? ElevatedButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      maidEntries.removeLast();
-                                      _maidNumberControllers.removeLast();
-                                      _maidNameControllers.removeLast();
-                                    });
-                                  },
-                                  child: const Text("Remove Maid"),
-                                ) : SizedBox(width: 1,),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      maidEntries.add(MaidEntry('', ''));
-                                      _maidNameControllers.add(TextEditingController());
-                                      _maidNumberControllers.add(TextEditingController());
-                                    });
-                                  },
-                                  child: const Text("Add Maid"),
-                                ),
-                              ],
-                            ) : const SizedBox(height: 1.0),
+                            maidEntry == "Yes"
+                                ? Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      maidEntries.length > 0
+                                          ? ElevatedButton(
+                                              onPressed: () {
+                                                setState(() {
+                                                  maidEntries.removeLast();
+                                                  _maidNumberControllers
+                                                      .removeLast();
+                                                  _maidNameControllers
+                                                      .removeLast();
+                                                });
+                                              },
+                                              child: const Text("Remove Maid"),
+                                            )
+                                          : SizedBox(
+                                              width: 1,
+                                            ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            maidEntries.add(MaidEntry('', ''));
+                                            _maidNameControllers
+                                                .add(TextEditingController());
+                                            _maidNumberControllers
+                                                .add(TextEditingController());
+                                          });
+                                        },
+                                        child: const Text("Add Maid"),
+                                      ),
+                                    ],
+                                  )
+                                : const SizedBox(height: 1.0),
                             const SizedBox(height: 15.0),
                             SizedBox(
                               height: 60, //height of button

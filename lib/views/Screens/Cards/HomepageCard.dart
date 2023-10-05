@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../constants.dart';
@@ -10,6 +11,7 @@ class HomePageCard extends StatelessWidget {
   final String wing;
   final String imageUrl;
   final String number;
+  final String private;
 
   HomePageCard({
     required this.name,
@@ -17,6 +19,7 @@ class HomePageCard extends StatelessWidget {
     required this.wing,
     required this.imageUrl,
     required this.number,
+    required this.private,
   });
 
   Future launchDialer() async {
@@ -36,7 +39,20 @@ class HomePageCard extends StatelessWidget {
       child: Row(
         children: [
           GestureDetector(
-            onTap: launchDialer,
+            onTap: () {
+              if (private == "Yes") {
+                Fluttertoast.showToast(
+                  msg: "Number is Private!",
+                  toastLength: Toast.LENGTH_SHORT,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: kprimaryColor,
+                  textColor: Colors.white,
+                  fontSize: 16.0,
+                );
+              } else {
+                launchDialer();
+              }
+            },
             child: Container(
               margin: const EdgeInsets.only(right: 12.0),
               height: 40.0,
@@ -57,7 +73,8 @@ class HomePageCard extends StatelessWidget {
                     padding: const EdgeInsets.only(right: 10),
                     child: AutoSizeText(
                       name,
-                      style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 16.0, fontWeight: FontWeight.bold),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -68,12 +85,14 @@ class HomePageCard extends StatelessWidget {
                   children: [
                     Text(
                       'Flat No: $flatNo',
-                      style: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500),
+                      style: const TextStyle(
+                          fontSize: 14.0, fontWeight: FontWeight.w500),
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
                       'Wing: $wing-Wing',
-                      style: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500),
+                      style: const TextStyle(
+                          fontSize: 14.0, fontWeight: FontWeight.w500),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],
