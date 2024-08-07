@@ -78,49 +78,49 @@ class _OtpScreenState extends State<OtpScreen> {
     });
   }
 
-  Future _verifyOtp(BuildContext ctx) async {
-    isLoading = true;
-    var authProvider = Provider.of<Auth>(ctx, listen: false);
-    if (otp.length == 6) {
-      isValid = await authProvider.verifyOtp(otp).catchError((e) {
-        return false;
-      });
-      if (isValid) {
-        var user = await authProvider.checkUser();
-        var fcmT = await FirebaseNotification().getToken();
-        if (phoneNo == "+911234567890") {
-          Navigator.of(ctx).pushReplacementNamed(AdminBottomBar.routeName);
-        } else {
-          if (user) {
-            await Provider.of<UserProvider>(context, listen: false)
-                .updateToken(fcmT.toString(), authProvider.token)
-                .then((value) {
-                  const initin = 0;
-              Navigator.of(ctx).pushReplacementNamed(UserBottomBar.routeName, arguments: initin);
-            });
+    Future _verifyOtp(BuildContext ctx) async {
+      isLoading = true;
+      var authProvider = Provider.of<Auth>(ctx, listen: false);
+      if (otp.length == 6) {
+        isValid = await authProvider.verifyOtp(otp).catchError((e) {
+          return false;
+        });
+        if (isValid) {
+          var user = await authProvider.checkUser();
+          var fcmT = await FirebaseNotification().getToken();
+          if (phoneNo == "+911234567890") {
+            Navigator.of(ctx).pushReplacementNamed(AdminBottomBar.routeName);
           } else {
-            Navigator.of(ctx).pushReplacementNamed(Register.routeName);
+            if (user) {
+              await Provider.of<UserProvider>(context, listen: false)
+                  .updateToken(fcmT.toString(), authProvider.token)
+                  .then((value) {
+                    const initin = 0;
+                Navigator.of(ctx).pushReplacementNamed(UserBottomBar.routeName, arguments: initin);
+              });
+            } else {
+              Navigator.of(ctx).pushReplacementNamed(Register.routeName);
+            }
           }
+        } else {
+          setState(() {
+            isLoading = false;
+          });
         }
       } else {
         setState(() {
           isLoading = false;
         });
+        Fluttertoast.showToast(
+          msg: "Something Went Wrong !",
+          toastLength: Toast.LENGTH_SHORT,
+          timeInSecForIosWeb: 1,
+          backgroundColor: kprimaryColor,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
       }
-    } else {
-      setState(() {
-        isLoading = false;
-      });
-      Fluttertoast.showToast(
-        msg: "Something Went Wrong !",
-        toastLength: Toast.LENGTH_SHORT,
-        timeInSecForIosWeb: 1,
-        backgroundColor: kprimaryColor,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
     }
-  }
 
   @override
   Widget build(BuildContext context) {

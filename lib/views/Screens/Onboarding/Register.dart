@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -348,10 +349,12 @@ class _RegisterState extends State<Register> {
                                   child: Row(
                                     children: [
                                       const SizedBox(width: 10.0),
-                                      Text(
+                                      AutoSizeText(
                                         'Number Privacy',
-                                        style: kTextPopR14.copyWith(
+                                        style: kTextPopR12.copyWith(
                                             color: Colors.black54),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
                                       const SizedBox(width: 9.0),
                                       SizedBox(
@@ -722,7 +725,7 @@ class _RegisterState extends State<Register> {
                                 : const SizedBox(height: 1.0),
                             const SizedBox(height: 15.0),
                             SizedBox(
-                              height: 60, //height of button
+                              height: 64, //height of button
                               width: 250, //width of button
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
@@ -736,9 +739,9 @@ class _RegisterState extends State<Register> {
                                         20) //content padding inside button
                                     ),
                                 onPressed: () => _createProfile(context),
-                                child: const Text(
+                                child: AutoSizeText(
                                   "Register Flat",
-                                  style: TextStyle(fontSize: 18),
+                                  style: kTextPopR16,
                                 ),
                               ),
                             ),

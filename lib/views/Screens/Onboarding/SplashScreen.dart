@@ -3,11 +3,10 @@ import 'package:acrogate/views/Screens/AdminBottomNav/AdminBottomNav.dart';
 import 'package:acrogate/views/Screens/UserBottomNav/UserBottomNav.dart';
 import 'package:acrogate/views/Screens/Onboarding/Login.dart';
 import 'package:acrogate/views/constants.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:acrogate/views/Screens/SizeConfig.dart';
 import 'package:provider/provider.dart';
-
-import '../AdminBottomNav/AdminSide.dart';
 
 class SplashScreen extends StatefulWidget {
   static var routeName = "/splash";
@@ -35,7 +34,8 @@ class _SplashScreenState extends State<SplashScreen> {
         } else {
           if (authProvider.isAuth) {
             const initin = 1;
-            Navigator.of(ctx).pushReplacementNamed(UserBottomBar.routeName, arguments: initin);
+            Navigator.of(ctx).pushReplacementNamed(UserBottomBar.routeName,
+                arguments: initin);
           } else {
             Navigator.of(ctx).pushReplacementNamed(LogIn.routeName);
           }
@@ -62,7 +62,14 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
             ),
           ),
-          Text("By ChairPerson - Jubin Jain", style: kTextPopB14),
+          Expanded(
+            child: AutoSizeText(
+              "By ChairPerson - Jubin Jain",
+              style: kTextPopB14,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
         ],
       ),
     );
