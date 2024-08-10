@@ -35,7 +35,8 @@ class _AdminCardState extends State<AdminCard> {
   var isLoading = false;
 
   Future<void> _getImageFromCamera() async {
-    final pickedFile = await ImagePicker().getImage(source: ImageSource.camera);
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.camera);
 
     setState(() {
       if (pickedFile != null) {
@@ -216,11 +217,9 @@ class _AdminCardState extends State<AdminCard> {
   }
 
   void getStatus(String eid) {
-    if(eid == "")
-      {
-        reset("Entry Approved");
-      }
-    else {
+    if (eid == "") {
+      reset("Entry Denied");
+    } else {
       Future.delayed(const Duration(seconds: 4), () async {
         var entryProvider = Provider.of<EntryProvider>(context, listen: false);
         entryProvider
@@ -258,33 +257,32 @@ class _AdminCardState extends State<AdminCard> {
   Widget build(BuildContext context) {
     return isLoading
         ? Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const CircularProgressIndicator(),
-            const SizedBox(height: 100),
-            SizedBox(
-              height: 40, //height of button
-              width: 200, //width of button
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary:
-                  Colors.red, //background color of button
-                  shape: RoundedRectangleBorder(
-                    //to set border radius to button
-                      borderRadius: BorderRadius.circular(10)),
-                  //content padding inside button
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const CircularProgressIndicator(),
+              const SizedBox(height: 100),
+              SizedBox(
+                height: 40, //height of button
+                width: 200, //width of button
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red, //background color of button
+                    shape: RoundedRectangleBorder(
+                        //to set border radius to button
+                        borderRadius: BorderRadius.circular(10)),
+                    //content padding inside button
+                  ),
+                  onPressed: () {
+                    _closeEntry(context);
+                  },
+                  child: const Text(
+                    "Cancel Request",
+                    style: TextStyle(fontSize: 15, color: Colors.white),
+                  ),
                 ),
-                onPressed: () {
-                  _closeEntry(context);
-                },
-                child: const Text(
-                  "Cancel Request",
-                  style: TextStyle(fontSize: 15),
-                ),
-              ),
-            )
-          ],
-        )
+              )
+            ],
+          )
         : Container(
             margin:
                 const EdgeInsets.symmetric(horizontal: 32.0, vertical: 15.0),
@@ -293,8 +291,10 @@ class _AdminCardState extends State<AdminCard> {
               border: Border.all(color: kprimaryColor, width: 2.0),
               borderRadius: BorderRadius.circular(10.0),
             ),
+            height: MediaQuery.of(context).size.height - 220,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Card(
                   elevation: 2.0,
@@ -483,10 +483,10 @@ class _AdminCardState extends State<AdminCard> {
                           const SizedBox(height: 20.0),
                           SizedBox(
                             height: 40, //height of button
-                            width: 200, //width of button
+                            width: 220, //width of button
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                primary:
+                                backgroundColor:
                                     kprimaryColor, //background color of button
                                 shape: RoundedRectangleBorder(
                                     //to set border radius to button
@@ -496,9 +496,10 @@ class _AdminCardState extends State<AdminCard> {
                               onPressed: () {
                                 _createEntry(context);
                               },
-                              child: const Text(
-                                "Send Approval Request",
-                                style: TextStyle(fontSize: 15),
+                              child: Text(
+                                "Send Request",
+                                style:
+                                    kTextPopB14.copyWith(color: Colors.white),
                               ),
                             ),
                           ),
@@ -523,7 +524,7 @@ class _AdminCardState extends State<AdminCard> {
               if (modalState == ModalState.Loading)
                 Center(
                   child: SizedBox(
-                    height: 200.0,
+                    height: 300.0,
                     child: Column(
                       children: [
                         Image.asset(
@@ -535,7 +536,8 @@ class _AdminCardState extends State<AdminCard> {
                           width: 120, //width of button
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              primary: Colors.red, //background color of button
+                              backgroundColor:
+                                  Colors.red, //background color of button
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10)),
                             ),
@@ -556,8 +558,9 @@ class _AdminCardState extends State<AdminCard> {
               if (modalState == ModalState.Success)
                 Center(
                   child: SizedBox(
-                    height: 250.0,
+                    height: 300.0,
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Image.asset(
                           'assets/animation/approve.gif',
@@ -569,15 +572,15 @@ class _AdminCardState extends State<AdminCard> {
                               fontSize: 25, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(
-                          height: 11,
+                          height: 1,
                         ),
                         SizedBox(
                           height: 35, //height of button
                           width: 120, //width of button
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              primary:
-                              kprimaryColor, //background color of button
+                              backgroundColor:
+                                  kprimaryColor, //background color of button
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10)),
                             ),
@@ -585,9 +588,9 @@ class _AdminCardState extends State<AdminCard> {
                               Navigator.of(context).pop();
                               _modalState = ModalState.Initial;
                             },
-                            child: const Text(
+                            child: Text(
                               "OK",
-                              style: TextStyle(fontSize: 15),
+                              style: kTextPopB16.copyWith(color: Colors.white),
                             ),
                           ),
                         ),
@@ -618,7 +621,8 @@ class _AdminCardState extends State<AdminCard> {
                           width: 120, //width of button
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              primary: Colors.red, //background color of button
+                              backgroundColor:
+                                  Colors.red, //background color of button
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10)),
                             ),
@@ -626,9 +630,9 @@ class _AdminCardState extends State<AdminCard> {
                               Navigator.of(context).pop();
                               _modalState = ModalState.Initial;
                             },
-                            child: const Text(
+                            child: Text(
                               "OK",
-                              style: TextStyle(fontSize: 15),
+                              style: kTextPopB16.copyWith(color: Colors.white),
                             ),
                           ),
                         ),

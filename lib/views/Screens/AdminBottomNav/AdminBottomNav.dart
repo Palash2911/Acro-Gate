@@ -1,7 +1,7 @@
 import 'package:acrogate/views/Screens/AdminBottomNav/AdminSide.dart';
 import 'package:acrogate/views/Screens/AdminBottomNav/MaidScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 import '../../constants.dart';
 
@@ -15,7 +15,6 @@ class AdminBottomBar extends StatefulWidget {
 }
 
 class _AdminBottomBarState extends State<AdminBottomBar> {
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -26,7 +25,7 @@ class _AdminBottomBarState extends State<AdminBottomBar> {
     return Scaffold(
       body: PersistentTabView(
         context,
-        hideNavigationBarWhenKeyboardShows: true,
+        hideNavigationBarWhenKeyboardAppears: true,
         resizeToAvoidBottomInset: true,
         screens: _buildScreens(),
         items: _navBarsItems(),

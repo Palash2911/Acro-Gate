@@ -186,7 +186,7 @@ class _RegisterState extends State<Register> {
   }
 
   Future _getFromGallery() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
+    final pickedFile = await ImagePicker().pickImage(
       source: ImageSource.gallery,
       maxWidth: 1800,
       maxHeight: 1800,
@@ -343,7 +343,7 @@ class _RegisterState extends State<Register> {
                                   decoration: BoxDecoration(
                                     color: Colors.green.shade100,
                                     border: Border.all(
-                                        color: kprimaryColor, width: 2),
+                                        color: kprimaryColor, width: 1.5),
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   child: Row(
@@ -421,7 +421,7 @@ class _RegisterState extends State<Register> {
                                   decoration: BoxDecoration(
                                     color: Colors.green.shade100,
                                     border: Border.all(
-                                        color: kprimaryColor, width: 2),
+                                        color: kprimaryColor, width: 1.5),
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   child: Row(
@@ -491,7 +491,7 @@ class _RegisterState extends State<Register> {
                                   padding: const EdgeInsets.only(left: 9.0),
                                   decoration: BoxDecoration(
                                     border: Border.all(
-                                        color: kprimaryColor, width: 2.0),
+                                        color: kprimaryColor, width: 1.5),
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   width:
@@ -536,7 +536,7 @@ class _RegisterState extends State<Register> {
                                   decoration: BoxDecoration(
                                     color: Colors.green.shade100,
                                     border: Border.all(
-                                        color: kprimaryColor, width: 2),
+                                        color: kprimaryColor, width: 1.5),
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   child: Row(
@@ -723,25 +723,26 @@ class _RegisterState extends State<Register> {
                                     ],
                                   )
                                 : const SizedBox(height: 1.0),
-                            const SizedBox(height: 15.0),
+                            const SizedBox(height: 10.0),
                             SizedBox(
                               height: 64, //height of button
                               width: 250, //width of button
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                    primary:
+                                    backgroundColor:
                                         kprimaryColor, //background color of button
                                     shape: RoundedRectangleBorder(
                                         //to set border radius to button
                                         borderRadius:
                                             BorderRadius.circular(10)),
                                     padding: const EdgeInsets.all(
-                                        20) //content padding inside button
+                                        18) //content padding inside button
                                     ),
                                 onPressed: () => _createProfile(context),
                                 child: AutoSizeText(
                                   "Register Flat",
-                                  style: kTextPopR16,
+                                  style:
+                                      kTextPopB16.copyWith(color: Colors.white),
                                 ),
                               ),
                             ),

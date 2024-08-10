@@ -44,7 +44,7 @@ class _LogInState extends State<LogIn> {
           textColor: Colors.white,
           fontSize: 16.0,
         );
-      }).then((value) {
+      }).then((_) {
         Fluttertoast.showToast(
           msg: "OTP Sent Successfully !",
           toastLength: Toast.LENGTH_SHORT,
@@ -55,6 +55,15 @@ class _LogInState extends State<LogIn> {
         );
         Navigator.of(context)
             .pushNamed(OtpScreen.routeName, arguments: phoneNo);
+      }).catchError((e) {
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          toastLength: Toast.LENGTH_SHORT,
+          timeInSecForIosWeb: 1,
+          backgroundColor: kprimaryColor,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
       });
     } else {
       Fluttertoast.showToast(
@@ -88,7 +97,7 @@ class _LogInState extends State<LogIn> {
               child: SafeArea(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 35.0, vertical: 45.0),
+                      horizontal: 35.0, vertical: 54.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -120,6 +129,24 @@ class _LogInState extends State<LogIn> {
                             counterText: "",
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15.0),
+                              borderSide: const BorderSide(
+                                color: Colors.black,
+                                width: 1,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                              borderSide: const BorderSide(
+                                color: Colors.green,
+                                width: 2,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                              borderSide: const BorderSide(
+                                color: Colors.black,
+                                width: 1,
+                              ),
                             ),
                           ),
                           validator: (value) {
@@ -149,7 +176,11 @@ class _LogInState extends State<LogIn> {
                             textStyle: const TextStyle(
                               fontSize: 18,
                             )),
-                        child: const Text('Generate OTP'),
+                        child: const Text(
+                          'Generate OTP',
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.w600),
+                        ),
                       ),
                     ],
                   ),

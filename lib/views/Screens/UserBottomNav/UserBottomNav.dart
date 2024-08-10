@@ -3,7 +3,7 @@ import 'package:acrogate/views/Screens/UserBottomNav/Homepage.dart';
 import 'package:acrogate/views/Screens/UserBottomNav/Profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 import '../../constants.dart';
 
@@ -18,7 +18,7 @@ class UserBottomBar extends StatefulWidget {
 
 class _UserBottomBarState extends State<UserBottomBar> {
   late PersistentTabController _controller =
-  PersistentTabController(initialIndex: 0);
+      PersistentTabController(initialIndex: 0);
 
   @override
   void didChangeDependencies() {
@@ -32,12 +32,12 @@ class _UserBottomBarState extends State<UserBottomBar> {
     return Scaffold(
       body: PersistentTabView(
         context,
-        hideNavigationBarWhenKeyboardShows: true,
+        hideNavigationBarWhenKeyboardAppears: true,
         resizeToAvoidBottomInset: true,
         controller: _controller,
         screens: _buildScreens(),
         items: _navBarsItems(),
-        navBarStyle: NavBarStyle.style1,
+        navBarStyle: NavBarStyle.style4,
       ),
     );
   }

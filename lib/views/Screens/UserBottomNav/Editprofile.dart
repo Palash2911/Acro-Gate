@@ -131,8 +131,10 @@ class _EditProfileState extends State<EditProfile> {
           maidEntries.add(MaidEntry(maidNames[i], maidNum[i]));
         }
         for (int i = 0; i < maidEntries.length; i++) {
-          _maidNameControllers.add(TextEditingController(text: maidEntries[i].name));
-          _maidNumberControllers.add(TextEditingController(text: maidEntries[i].number));
+          _maidNameControllers
+              .add(TextEditingController(text: maidEntries[i].name));
+          _maidNumberControllers
+              .add(TextEditingController(text: maidEntries[i].number));
         }
       }
       setState(() {
@@ -228,7 +230,7 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   Future _getFromGallery() async {
-    PickedFile? pickedFile = await ImagePicker().getImage(
+    final pickedFile = await ImagePicker().pickImage(
       source: ImageSource.gallery,
       maxWidth: 1800,
       maxHeight: 1800,
@@ -244,11 +246,32 @@ class _EditProfileState extends State<EditProfile> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          title: const Padding(
-            padding: EdgeInsets.fromLTRB(12.0, 2.0, 0.0, 0.0),
-            child: Text(
-              'Edit Profile',
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(kToolbarHeight + 10),
+          child: Container(
+            decoration: BoxDecoration(
+              color: kprimaryColor,
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(18.0),
+                bottomRight: Radius.circular(18.0),
+              ),
+            ),
+            child: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              toolbarHeight: kToolbarHeight + 70,
+              iconTheme: IconThemeData(
+                color: Colors.white,
+                size: 27,
+              ),
+              centerTitle: false,
+              title: const Padding(
+                padding: EdgeInsets.all(0),
+                child: Text(
+                  'Edit Profile',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
             ),
           ),
         ),
@@ -420,9 +443,9 @@ class _EditProfileState extends State<EditProfile> {
                                                 onTap: () {
                                                   setState(() {
                                                     privacies.forEach(
-                                                            (private) =>
-                                                        private.isSelected =
-                                                        false);
+                                                        (private) =>
+                                                            private.isSelected =
+                                                                false);
                                                     privacies[index]
                                                         .isSelected = true;
                                                     privacy = privacies[index]
@@ -438,16 +461,16 @@ class _EditProfileState extends State<EditProfile> {
                                                       style: TextStyle(
                                                           fontSize: 12,
                                                           color: !privacies[
-                                                          index]
-                                                              .isSelected
+                                                                      index]
+                                                                  .isSelected
                                                               ? Colors.green
                                                               : Colors.white),
                                                     ),
                                                     backgroundColor:
-                                                    !privacies[index]
-                                                        .isSelected
-                                                        ? Colors.white
-                                                        : Colors.green,
+                                                        !privacies[index]
+                                                                .isSelected
+                                                            ? Colors.white
+                                                            : Colors.green,
                                                   ),
                                                 ),
                                               );
@@ -780,19 +803,20 @@ class _EditProfileState extends State<EditProfile> {
                               width: 250, //width of button
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                    primary:
+                                    backgroundColor:
                                         kprimaryColor, //background color of button
                                     shape: RoundedRectangleBorder(
                                         //to set border radius to button
                                         borderRadius:
                                             BorderRadius.circular(10)),
                                     padding: const EdgeInsets.all(
-                                        20) //content padding inside button
+                                        17) //content padding inside button
                                     ),
                                 onPressed: () => _updateProfile(context),
-                                child: const Text(
+                                child: Text(
                                   "Update Profile",
-                                  style: TextStyle(fontSize: 18),
+                                  style:
+                                      kTextPopB16.copyWith(color: Colors.white),
                                 ),
                               ),
                             ),

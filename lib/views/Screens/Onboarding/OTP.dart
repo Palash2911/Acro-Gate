@@ -32,14 +32,24 @@ class _OtpScreenState extends State<OtpScreen> {
   String phoneNo = "";
   var isInit = true;
   var resendVisible = false;
+  List<dynamic> securityList = [];
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (isInit) {
       phoneNo = ModalRoute.of(context)!.settings.arguments.toString();
+      getSecurity();
     }
     isInit = false;
+  }
+
+  void getSecurity() async {
+    var userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    securityList = await userProvider.getAllSecurity().catchError((e) {
+      print(e);
+    });
   }
 
   @override
@@ -78,49 +88,52 @@ class _OtpScreenState extends State<OtpScreen> {
     });
   }
 
-    Future _verifyOtp(BuildContext ctx) async {
-      isLoading = true;
-      var authProvider = Provider.of<Auth>(ctx, listen: false);
-      if (otp.length == 6) {
-        isValid = await authProvider.verifyOtp(otp).catchError((e) {
-          return false;
-        });
-        if (isValid) {
-          var user = await authProvider.checkUser();
-          var fcmT = await FirebaseNotification().getToken();
-          if (phoneNo == "+911234567890") {
-            Navigator.of(ctx).pushReplacementNamed(AdminBottomBar.routeName);
-          } else {
-            if (user) {
-              await Provider.of<UserProvider>(context, listen: false)
-                  .updateToken(fcmT.toString(), authProvider.token)
-                  .then((value) {
-                    const initin = 0;
-                Navigator.of(ctx).pushReplacementNamed(UserBottomBar.routeName, arguments: initin);
-              });
-            } else {
-              Navigator.of(ctx).pushReplacementNamed(Register.routeName);
-            }
-          }
+  Future _verifyOtp(BuildContext ctx) async {
+    isLoading = true;
+    var authProvider = Provider.of<Auth>(ctx, listen: false);
+
+    if (otp.length == 6) {
+      isValid = await authProvider.verifyOtp(otp).catchError((e) {
+        return false;
+      });
+      if (isValid) {
+        var user = await authProvider.checkUser();
+        var fcmT = await FirebaseNotification().getToken();
+
+        if (securityList.contains(authProvider.token)) {
+          Navigator.of(ctx).pushReplacementNamed(AdminBottomBar.routeName);
         } else {
-          setState(() {
-            isLoading = false;
-          });
+          if (user) {
+            await Provider.of<UserProvider>(context, listen: false)
+                .updateToken(fcmT.toString(), authProvider.token)
+                .then((value) {
+              const initin = 0;
+              Navigator.of(ctx).pushReplacementNamed(UserBottomBar.routeName,
+                  arguments: initin);
+            });
+          } else {
+            Navigator.of(ctx).pushReplacementNamed(Register.routeName);
+          }
         }
       } else {
         setState(() {
           isLoading = false;
         });
-        Fluttertoast.showToast(
-          msg: "Something Went Wrong !",
-          toastLength: Toast.LENGTH_SHORT,
-          timeInSecForIosWeb: 1,
-          backgroundColor: kprimaryColor,
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
       }
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+      Fluttertoast.showToast(
+        msg: "Something Went Wrong !",
+        toastLength: Toast.LENGTH_SHORT,
+        timeInSecForIosWeb: 1,
+        backgroundColor: kprimaryColor,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
     }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -193,6 +206,24 @@ class _OtpScreenState extends State<OtpScreen> {
                                 counterText: "",
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(15.0),
+                                  borderSide: const BorderSide(
+                                    color: Colors.black,
+                                    width: 1,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  borderSide: const BorderSide(
+                                    color: Colors.green,
+                                    width: 2,
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  borderSide: const BorderSide(
+                                    color: Colors.black,
+                                    width: 1,
+                                  ),
                                 ),
                               ),
                               keyboardType: TextInputType.phone,

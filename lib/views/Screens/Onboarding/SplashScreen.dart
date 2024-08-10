@@ -1,4 +1,5 @@
 import 'package:acrogate/providers/auth_provider.dart';
+import 'package:acrogate/providers/user_provider.dart';
 import 'package:acrogate/views/Screens/AdminBottomNav/AdminBottomNav.dart';
 import 'package:acrogate/views/Screens/UserBottomNav/UserBottomNav.dart';
 import 'package:acrogate/views/Screens/Onboarding/Login.dart';
@@ -26,19 +27,25 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future loadScreen(BuildContext ctx) async {
     var authProvider = Provider.of<Auth>(context, listen: false);
+    var userProvider = Provider.of<UserProvider>(context, listen: false);
+    List<dynamic> securityList = [];
+
+    securityList = await userProvider.getAllSecurity().catchError((e) {
+      print(e);
+    });
 
     Future.delayed(const Duration(seconds: 2), () async {
       await authProvider.autoLogin().then((_) async {
-        if (authProvider.token == "6RSj6M3qYAYLXkICEOYvNsIkAgE2") {
-          Navigator.of(ctx).pushReplacementNamed(AdminBottomBar.routeName);
-        } else {
-          if (authProvider.isAuth) {
+        if (authProvider.isAuth) {
+          if (securityList.contains(authProvider.token)) {
+            Navigator.of(ctx).pushReplacementNamed(AdminBottomBar.routeName);
+          } else {
             const initin = 1;
             Navigator.of(ctx).pushReplacementNamed(UserBottomBar.routeName,
                 arguments: initin);
-          } else {
-            Navigator.of(ctx).pushReplacementNamed(LogIn.routeName);
           }
+        } else {
+          Navigator.of(ctx).pushReplacementNamed(LogIn.routeName);
         }
       });
     });
@@ -55,20 +62,18 @@ class _SplashScreenState extends State<SplashScreen> {
         children: [
           Center(
             child: SizedBox(
-              height: 450.0,
+              height: 300.0,
               child: Image.asset(
                 'assets/animation/splash.gif',
                 fit: BoxFit.contain,
               ),
             ),
           ),
-          Expanded(
-            child: AutoSizeText(
-              "By ChairPerson - Jubin Jain",
-              style: kTextPopB14,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
+          AutoSizeText(
+            "By - Jubin Jain",
+            style: kTextPopB14,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),

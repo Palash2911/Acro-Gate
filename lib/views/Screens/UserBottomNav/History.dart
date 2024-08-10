@@ -32,11 +32,33 @@ class _HistoryState extends State<History> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Padding(
-          padding: EdgeInsets.fromLTRB(12.0, 2.0, 0.0, 0.0),
-          child: Text(
-            'Entries',
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight + 10),
+        child: Container(
+          decoration: BoxDecoration(
+            color: kprimaryColor,
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(18.0),
+              bottomRight: Radius.circular(18.0),
+            ),
+          ),
+          child: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            toolbarHeight: kToolbarHeight + 70,
+            iconTheme: IconThemeData(
+              color: Colors.white,
+              size: 27,
+            ),
+            centerTitle: false,
+            title: const Padding(
+              padding: EdgeInsets.only(left: 15.0),
+              child: Text(
+                'Entries',
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+              ),
+            ),
           ),
         ),
       ),

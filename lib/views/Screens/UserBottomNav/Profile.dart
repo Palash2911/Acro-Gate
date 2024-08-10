@@ -84,11 +84,33 @@ class _ProfileState extends State<Profile> {
             ),
           )
         : Scaffold(
-            appBar: AppBar(
-              title: const Padding(
-                padding: EdgeInsets.fromLTRB(12.0, 2.0, 0.0, 0.0),
-                child: Text(
-                  'Profile',
+            appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(kToolbarHeight + 10),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: kprimaryColor,
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(18.0),
+                    bottomRight: Radius.circular(18.0),
+                  ),
+                ),
+                child: AppBar(
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  toolbarHeight: kToolbarHeight + 70,
+                  iconTheme: IconThemeData(
+                    color: Colors.white,
+                    size: 27,
+                  ),
+                  centerTitle: false,
+                  title: const Padding(
+                    padding: EdgeInsets.only(left: 15.0),
+                    child: Text(
+                      'Profile',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w600),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -97,7 +119,7 @@ class _ProfileState extends State<Profile> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const SizedBox(height: 100),
+                    const SizedBox(height: 50),
                     ProfileCard(),
                     Container(
                       margin: const EdgeInsets.symmetric(

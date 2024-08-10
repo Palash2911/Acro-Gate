@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _killCode() async {
-    await Provider.of<EntryProvider>(context,listen: false).killCode();
+    await Provider.of<EntryProvider>(context, listen: false).killCode();
   }
 
   Future<void> _getData() async {
@@ -44,11 +44,33 @@ class _HomePageState extends State<HomePage> {
             child: const CircularProgressIndicator(),
           )
         : Scaffold(
-            appBar: AppBar(
-              title: const Padding(
-                padding: EdgeInsets.fromLTRB(12.0, 2.0, 0.0, 0.0),
-                child: Text(
-                  'Acro Gate',
+            appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(kToolbarHeight + 10),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: kprimaryColor,
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(18.0),
+                    bottomRight: Radius.circular(18.0),
+                  ),
+                ),
+                child: AppBar(
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  toolbarHeight: kToolbarHeight + 70,
+                  iconTheme: IconThemeData(
+                    color: Colors.white,
+                    size: 27,
+                  ),
+                  centerTitle: false,
+                  title: const Padding(
+                    padding: EdgeInsets.only(left: 15.0),
+                    child: Text(
+                      'Acro Gate',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w600),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -56,7 +78,7 @@ class _HomePageState extends State<HomePage> {
               child: SafeArea(
                 child: Container(
                   height: MediaQuery.of(context).size.height -
-                      4*kBottomNavigationBarHeight,
+                      4 * kBottomNavigationBarHeight,
                   padding: const EdgeInsets.only(bottom: 40, top: 20),
                   child: Column(
                     children: [
@@ -92,8 +114,7 @@ class _HomePageState extends State<HomePage> {
                                 return ListView(
                                   scrollDirection: Axis.vertical,
                                   shrinkWrap: true,
-                                  children:
-                                      snapshot.data!.docs.map((document) {
+                                  children: snapshot.data!.docs.map((document) {
                                     return HomePageCard(
                                       name: document['Name'],
                                       flatNo: document['FlatNo'],

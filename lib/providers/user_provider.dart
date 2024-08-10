@@ -81,6 +81,51 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> deleteMaid(String userId) async {
+    try {
+      CollectionReference maids =
+          FirebaseFirestore.instance.collection('Maids');
+      QuerySnapshot querySnapshot =
+          await maids.where('UID', isEqualTo: userId).get();
+
+      for (var doc in querySnapshot.docs) {
+        await doc.reference.delete();
+      }
+      notifyListeners();
+    } catch (e) {
+      notifyListeners();
+      rethrow;
+    }
+  }
+
+  Future updateMaid(Users user) async {
+    try {
+      CollectionReference maids =
+          FirebaseFirestore.instance.collection('Maids');
+
+      for (int i = 0; i < user.maidNames.length; i++) {
+        final querySnapshot = await maids
+            .where('MaidName', isEqualTo: user.maidNames[i])
+            .where('MaidPhoneNo', isEqualTo: user.maidNumbers[i])
+            .where('UID', isEqualTo: user.id)
+            .get();
+
+        await maids.doc().set({
+          "MaidName": user.maidNames[i],
+          "MaidPhoneNo": user.maidNumbers[i],
+          "UID": user.id,
+          "FlatNo": user.flatNo,
+          "Wing": user.wing,
+        });
+      }
+
+      notifyListeners();
+    } catch (e) {
+      notifyListeners();
+      rethrow;
+    }
+  }
+
   Future updateToken(String token, String uid) async {
     final prefs = await SharedPreferences.getInstance();
 
@@ -205,7 +250,7 @@ class UserProvider extends ChangeNotifier {
       });
       prefs.setString('ProfilePic', user.firebaseUrl);
       prefs.setString("UserName", user.name);
-      updateFlat(
+      await updateFlat(
           Flats(
             flatId: "",
             flatNo: user.flatNo,
@@ -216,7 +261,27 @@ class UserProvider extends ChangeNotifier {
           ),
           oldFlatno,
           oldWing);
+
+      await deleteMaid(user.id);
+      await updateMaid(user);
+
       notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<dynamic>> getAllSecurity() async {
+    try {
+      CollectionReference securityCollection =
+          FirebaseFirestore.instance.collection('SecurityUsers');
+      List<dynamic> securityList = [];
+
+      final querySnapshot = await securityCollection.get();
+      securityList = querySnapshot.docs.map((doc) => doc.id).toList();
+
+      notifyListeners();
+      return securityList;
     } catch (e) {
       rethrow;
     }
