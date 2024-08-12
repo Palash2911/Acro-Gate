@@ -1,6 +1,7 @@
 import 'package:acrogate/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/entry_provider.dart';
@@ -95,20 +96,24 @@ class _NotificationCardState extends State<NotificationCard> {
           children: [
             Column(
               children: [
-                const SizedBox(height: 15,),
+                const SizedBox(
+                  height: 15,
+                ),
                 CircleAvatar(
                   radius: 40.0,
                   backgroundImage: widget.url.isNotEmpty
                       ? Image.network(widget.url).image
                       : const AssetImage('assets/images/logo.png'),
                 ),
-                const SizedBox(height: 9,),
+                const SizedBox(
+                  height: 9,
+                ),
                 Text(
-                  "Date: ${widget.date}",
+                  "Date: ${DateFormat('dd MMM, yyyy').format(DateFormat('yyyy-MM-dd').parse(widget.date))}",
                   style: kTextPopR12,
                 ),
                 Text(
-                  "Time: ${widget.time}",
+                  "Time: ${DateFormat('h:mm a').format(DateTime.parse('1970-01-01 ${widget.time}'))}",
                   style: kTextPopR12,
                 )
               ],

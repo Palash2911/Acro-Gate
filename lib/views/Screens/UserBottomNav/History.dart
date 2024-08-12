@@ -70,7 +70,10 @@ class _HistoryState extends State<History> {
             const SizedBox(height: 30.0),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
-                stream: entryRef.orderBy("Date").snapshots(),
+                stream: entryRef
+                    .orderBy("Date", descending: true)
+                    .orderBy("Time", descending: true)
+                    .snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return const Center(

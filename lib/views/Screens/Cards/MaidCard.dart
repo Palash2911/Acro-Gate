@@ -32,7 +32,7 @@ class MaidCard extends StatelessWidget {
         wing: wing,
         phone: number,
         firebaseUrl: '',
-        date: DateFormat('dd-MM-yy').format(DateTime.now()).toString(),
+        date: DateFormat('yyyy-MM-dd').format(DateTime.now()).toString(),
         time: DateFormat('HH:mm:ss').format(DateTime.now()).toString(),
       ),
       null,

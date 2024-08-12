@@ -155,8 +155,6 @@ class EntryProvider extends ChangeNotifier {
     }
   }
 
-  Future approveAllEntry() async {}
-
   Future killCode() async {
     try {
       print(DateTime.now());

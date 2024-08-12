@@ -127,7 +127,7 @@ class _AdminCardState extends State<AdminCard> {
           wing: wing,
           phone: phone,
           firebaseUrl: '',
-          date: DateFormat('dd-MM-yy').format(DateTime.now()).toString(),
+          date: DateFormat('yyyy-MM-dd').format(DateTime.now()).toString(),
           time: DateFormat('HH:mm:ss').format(DateTime.now()).toString(),
         ),
         _image!,
